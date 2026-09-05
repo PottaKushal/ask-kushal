@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kushal Kumar Potta</title>
+<meta name="description" content="Kushal Kumar Potta — Software Engineer & ML student at Penn. Ask the AI assistant about his experience, or play with a live ownership-hierarchy demo." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand">Kushal Kumar Potta</a>
+    <div class="nav-links">
+      <a href="#chat">Ask Kushal</a>
+      <a href="#experience">Experience</a>
+      <a href="#demo">Live Demo</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header id="top" class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Software Engineer &middot; Applied ML &middot; Penn MSE '28</p>
+    <h1>I build systems that use AI to replace manual work &mdash; then I built this site the same way.</h1>
+    <p class="hero-sub">
+      Two years shipping production software at JPMorgan Chase, now an MSE student at Penn. This page has a
+      live AI assistant grounded in my actual resume, and an interactive recreation of an ownership-hierarchy
+      tool I built for Financial Sponsors. Not a demo screenshot &mdash; it's actually running.
+    </p>
+    <div class="hero-actions">
+      <a href="#chat" class="btn btn-primary">Ask the AI about me</a>
+      <a href="#demo" class="btn btn-ghost">Try the live demo</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="chat" class="section">
+    <div class="section-inner">
+      <h2>Ask Kushal</h2>
+      <p class="section-sub">
+        A live LLM (Claude, via Anthropic's API) grounded in my resume and project history &mdash; the same idea
+        behind the Confluence RAG assistant I built at JPMorgan, just aimed at me instead of internal docs. Ask
+        it anything a recruiter would want to know.
+      </p>
+
+      <div class="chat-card">
+        <div id="chat-log" class="chat-log" aria-live="polite">
+          <div class="msg msg-bot">
+            Hi, I'm an AI assistant grounded in Kushal's resume and project history. Ask me about his experience
+            at JPMorgan, his ML background, his projects, or why he's applying to Penn's MSE program &mdash;
+            anything on his resume.
+          </div>
+        </div>
+        <div class="chat-suggestions" id="chat-suggestions">
+          <button class="chip" data-q="What did he do at JPMorgan Chase?">What did he do at JPMorgan?</button>
+          <button class="chip" data-q="What's his ML and AI experience?">His ML/AI experience?</button>
+          <button class="chip" data-q="Tell me about the hierarchy visualizer project.">The hierarchy project?</button>
+          <button class="chip" data-q="Why is he pursuing a Master's at Penn?">Why grad school?</button>
+        </div>
+        <form id="chat-form" class="chat-form">
+          <input id="chat-input" type="text" placeholder="Ask about his experience, skills, or projects..." autocomplete="off" maxlength="500" />
+          <button type="submit" class="btn btn-primary" id="chat-send">Send</button>
+        </form>
+        <p class="chat-hint" id="chat-hint"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="section section-alt">
+    <div class="section-inner">
+      <h2>Experience</h2>
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <span class="timeline-role">Software Analyst, Full-Time</span>
+            <span class="timeline-org">JPMorgan Chase &amp; Co.</span>
+            <span class="timeline-date">Aug 2024 &ndash; Aug 2026</span>
+          </div>
+          <ul class="timeline-points">
+            <li>Led migration of ~4M cost centers during a Corporate&nbsp;&rarr;&nbsp;Commercial &amp; Investment Banking consolidation, orchestrated with Apache Airflow + Python. Shipped an AI-agent chatbot for instant migration-status lookups.</li>
+            <li>Migrated a legacy app to AWS ECS on Java 17 (&minus;60% report generation time); cut Airflow/EMR compute cost 25% (~$10K/mo saved); sped up 5GB+ transfers 25% via S3 multipart uploads.</li>
+            <li>Built a RAG chatbot over the team's Confluence space &mdash; crawled, chunked, and embedded every page so natural-language questions retrieve the right passage instantly.</li>
+            <li>Designed an end-to-end Java service consolidating two legacy profitability apps into GBIQ; separately built a CBCMP profitability ETL pipeline.</li>
+            <li>Engineered a PII data-masking pipeline (field redaction + SHA-1&rarr;SHA-2&rarr;SHA-3 hashing) across every production-to-UAT refresh.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <span class="timeline-role">Software Engineering Intern</span>
+            <span class="timeline-org">JPMorgan Chase &amp; Co.</span>
+            <span class="timeline-date">Feb 2024 &ndash; Jul 2024</span>
+          </div>
+          <ul class="timeline-points">
+            <li>Built an LLM-powered natural-language query tool visualizing multi-tier parent-child ownership structures for Financial Sponsors, auto-recalculating cascading hierarchy shifts from a single investment change.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <span class="timeline-role">Summer Intern</span>
+            <span class="timeline-org">Bosch</span>
+            <span class="timeline-date">Jul 2023 &ndash; Nov 2023</span>
+          </div>
+          <ul class="timeline-points">
+            <li>Trained a BERT-based NLP pipeline to auto-classify bug reports, cutting manual triage effort 40%.</li>
+            <li>Added dynamic Android Auto display configurations for in-car infotainment.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <span class="timeline-role">Intern</span>
+            <span class="timeline-org">Samsung Research</span>
+            <span class="timeline-date">Oct 2022 &ndash; Jan 2023</span>
+          </div>
+          <ul class="timeline-points">
+            <li>Shipped a sports NLP capsule for Bixby using TensorFlow + spaCy, lifting query-processing accuracy 20% for 500K+ monthly users.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="demo" class="section">
+    <div class="section-inner">
+      <h2>Live demo: ownership hierarchy visualizer</h2>
+      <p class="section-sub">
+        A simplified, from-scratch recreation of the tool I built for Financial Sponsors at JPMorgan: a
+        parent-child ownership tree where changing one investment cascades value changes up through every
+        parent automatically. Click a leaf node's value to edit it.
+      </p>
+      <div id="hierarchy-root" class="hierarchy-card"></div>
+    </div>
+  </section>
+
+  <section id="projects" class="section section-alt">
+    <div class="section-inner">
+      <h2>Projects</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Estately</h3>
+          <p class="card-tag">Real estate discovery platform &middot; Personal project</p>
+          <p>Aggregation platform for Bangalore real estate consolidating builder track records and project
+            histories, using statistical and sentiment analysis to forecast price trends and generate
+            area-growth heat maps. Swipe-based discovery UI with a referral-funded pricing model that pays
+            users back instead of charging them.</p>
+        </div>
+        <div class="card">
+          <h3>Padh.AI</h3>
+          <p class="card-tag">Mentor-mentee platform &middot; 2nd place, JPMorgan Code for Good Hackathon</p>
+          <p>Matches NGO mentors and mentees, integrating YouTube and WhatsApp APIs to expand outreach and
+            enabling live video mentoring sessions. Built with Firebase, PostgreSQL, and Next.js.</p>
+        </div>
+        <div class="card">
+          <h3>Confluence Knowledge Assistant</h3>
+          <p class="card-tag">RAG chatbot &middot; JPMorgan Chase</p>
+          <p>Crawled and chunked an entire team Confluence space, embedded the chunks, and served
+            natural-language Q&amp;A over it &mdash; replacing manual documentation search with conversation.
+            (This site's "Ask Kushal" chat is a direct descendant of this idea.)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="section">
+    <div class="section-inner">
+      <h2>Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>Languages</h4>
+          <p>Java, Python, C++, SQL, JavaScript</p>
+        </div>
+        <div class="skill-group">
+          <h4>ML / AI</h4>
+          <p>TensorFlow, PyTorch, Keras, BERT, LSTM, NLP (spaCy, NLTK), Pandas, NumPy</p>
+        </div>
+        <div class="skill-group">
+          <h4>Cloud &amp; Data</h4>
+          <p>AWS (S3, ECS, Glue, Lambda), Apache Spark, Apache Airflow, Docker, Kubernetes, Terraform</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section section-alt contact-section">
+    <div class="section-inner">
+      <h2>Get in touch</h2>
+      <p class="section-sub">Open to Summer 2027 software engineering and applied ML internships.</p>
+      <div class="contact-links">
+        <a href="mailto:kushalkumarpotta@gmail.com">kushalkumarpotta@gmail.com</a>
+        <a href="https://linkedin.com/in/kushal-kumar-potta" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/PottaKushal" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Built by Kushal, with Claude, as a working demonstration &mdash; not just a claim.</p>
+</footer>
+
+<script src="hierarchy.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

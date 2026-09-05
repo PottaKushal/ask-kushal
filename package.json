@@ -1,0 +1,9 @@
+{
+  "name": "ask-kushal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kushal Kumar Potta's portfolio site: an AI chat grounded in his resume, plus an interactive ownership-hierarchy demo.",
+  "scripts": {
+    "dev": "vercel dev"
+  }
+}
