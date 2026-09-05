@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kushal Kumar Potta</title>
-<meta name="description" content="Kushal Kumar Potta — Software Engineer & ML student at Penn. Ask the AI assistant about his experience, or play with a live ownership-hierarchy demo." />
+<meta name="description" content="Kushal Kumar Potta — Software Engineer & ML student at Penn. Explore his experience and a live, interactive ownership-hierarchy demo." />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -13,7 +13,6 @@
   <div class="nav-inner">
     <a href="#top" class="nav-brand">Kushal Kumar Potta</a>
     <div class="nav-links">
-      <a href="#chat">Ask Kushal</a>
       <a href="#experience">Experience</a>
       <a href="#demo">Live Demo</a>
       <a href="#projects">Projects</a>
@@ -25,52 +24,20 @@
 <header id="top" class="hero">
   <div class="hero-inner">
     <p class="eyebrow">Software Engineer &middot; Applied ML &middot; Penn MSE '28</p>
-    <h1>I build systems that use AI to replace manual work &mdash; then I built this site the same way.</h1>
+    <h1>I build systems that use AI to replace manual work.</h1>
     <p class="hero-sub">
-      Two years shipping production software at JPMorgan Chase, now an MSE student at Penn. This page has a
-      live AI assistant grounded in my actual resume, and an interactive recreation of an ownership-hierarchy
-      tool I built for Financial Sponsors. Not a demo screenshot &mdash; it's actually running.
+      Two years shipping production software at JPMorgan Chase, now an MSE student at Penn. Below is an
+      interactive recreation of an ownership-hierarchy tool I built for Financial Sponsors &mdash; not a demo
+      screenshot, it's actually running.
     </p>
     <div class="hero-actions">
-      <a href="#chat" class="btn btn-primary">Ask the AI about me</a>
-      <a href="#demo" class="btn btn-ghost">Try the live demo</a>
+      <a href="#demo" class="btn btn-primary">Try the live demo</a>
+      <a href="#experience" class="btn btn-ghost">See experience</a>
     </div>
   </div>
 </header>
 
 <main>
-
-  <section id="chat" class="section">
-    <div class="section-inner">
-      <h2>Ask Kushal</h2>
-      <p class="section-sub">
-        A live LLM (Claude, via Anthropic's API) grounded in my resume and project history &mdash; the same idea
-        behind the Confluence RAG assistant I built at JPMorgan, just aimed at me instead of internal docs. Ask
-        it anything a recruiter would want to know.
-      </p>
-
-      <div class="chat-card">
-        <div id="chat-log" class="chat-log" aria-live="polite">
-          <div class="msg msg-bot">
-            Hi, I'm an AI assistant grounded in Kushal's resume and project history. Ask me about his experience
-            at JPMorgan, his ML background, his projects, or why he's applying to Penn's MSE program &mdash;
-            anything on his resume.
-          </div>
-        </div>
-        <div class="chat-suggestions" id="chat-suggestions">
-          <button class="chip" data-q="What did he do at JPMorgan Chase?">What did he do at JPMorgan?</button>
-          <button class="chip" data-q="What's his ML and AI experience?">His ML/AI experience?</button>
-          <button class="chip" data-q="Tell me about the hierarchy visualizer project.">The hierarchy project?</button>
-          <button class="chip" data-q="Why is he pursuing a Master's at Penn?">Why grad school?</button>
-        </div>
-        <form id="chat-form" class="chat-form">
-          <input id="chat-input" type="text" placeholder="Ask about his experience, skills, or projects..." autocomplete="off" maxlength="500" />
-          <button type="submit" class="btn btn-primary" id="chat-send">Send</button>
-        </form>
-        <p class="chat-hint" id="chat-hint"></p>
-      </div>
-    </div>
-  </section>
 
   <section id="experience" class="section section-alt">
     <div class="section-inner">
@@ -164,8 +131,7 @@
           <h3>Confluence Knowledge Assistant</h3>
           <p class="card-tag">RAG chatbot &middot; JPMorgan Chase</p>
           <p>Crawled and chunked an entire team Confluence space, embedded the chunks, and served
-            natural-language Q&amp;A over it &mdash; replacing manual documentation search with conversation.
-            (This site's "Ask Kushal" chat is a direct descendant of this idea.)</p>
+            natural-language Q&amp;A over it &mdash; replacing manual documentation search with conversation.</p>
         </div>
       </div>
     </div>
@@ -206,10 +172,9 @@
 </main>
 
 <footer class="footer">
-  <p>Built by Kushal, with Claude, as a working demonstration &mdash; not just a claim.</p>
+  <p>Built by Kushal, with Claude.</p>
 </footer>
 
 <script src="hierarchy.js"></script>
-<script src="script.js"></script>
 </body>
 </html>
