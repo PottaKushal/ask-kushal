@@ -4,7 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kushal Kumar Potta</title>
-<meta name="description" content="Kushal Kumar Potta — Software Engineer & ML student at Penn. Explore his experience and a live, interactive ownership-hierarchy demo." />
+<meta name="description" content="Kushal Kumar Potta — Software Engineer & Applied ML student at Penn. Two case studies, real impact numbers, and a live interactive demo." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -13,10 +16,9 @@
   <div class="nav-inner">
     <a href="#top" class="nav-brand">Kushal Kumar Potta</a>
     <div class="nav-links">
+      <a href="#work">Work</a>
       <a href="#experience">Experience</a>
-      <a href="#demo">Live Demo</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-cta">Contact</a>
     </div>
   </div>
 </nav>
@@ -24,143 +26,234 @@
 <header id="top" class="hero">
   <div class="hero-inner">
     <p class="eyebrow">Software Engineer &middot; Applied ML &middot; Penn MSE '28</p>
-    <h1>I build systems that use AI to replace manual work.</h1>
+    <h1>I build systems that turn <span class="hl">manual work</span> into automation &mdash; then measure what it saved.</h1>
     <p class="hero-sub">
-      Two years shipping production software at JPMorgan Chase, now an MSE student at Penn. Below is an
-      interactive recreation of an ownership-hierarchy tool I built for Financial Sponsors &mdash; not a demo
-      screenshot, it's actually running.
+      Two years shipping production software at JPMorgan Chase, now an MSE student at Penn. Below: two real
+      case studies with real numbers, and a working interactive demo you can actually click on.
     </p>
     <div class="hero-actions">
-      <a href="#demo" class="btn btn-primary">Try the live demo</a>
-      <a href="#experience" class="btn btn-ghost">See experience</a>
+      <a href="#work" class="btn btn-primary">See the case studies</a>
+      <a href="mailto:kushalkumarpotta@gmail.com" class="btn btn-ghost">Get in touch</a>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat">
+        <div class="stat-num">4M+</div>
+        <div class="stat-label">cost centers migrated across environments</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">60%</div>
+        <div class="stat-label">faster report generation after an AWS ECS migration</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">$10K/mo</div>
+        <div class="stat-label">saved by streamlining Airflow/EMR compute</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">500K+</div>
+        <div class="stat-label">monthly users served by an NLP feature I shipped</div>
+      </div>
     </div>
   </div>
 </header>
 
 <main>
 
-  <section id="experience" class="section section-alt">
+  <section id="work" class="section">
     <div class="section-inner">
-      <h2>Experience</h2>
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">Selected work</p>
+          <h2>Two projects, worth the deeper read</h2>
+        </div>
+        <p class="section-sub">Full write-ups of the two projects that best show how I actually work &mdash;
+          not just what I shipped, but the problem, the approach, and what it moved.</p>
+      </div>
+
+      <div class="case-grid">
+        <a href="case-study-migration.html" class="case-card accent-lime">
+          <span class="case-tag">AI &amp; Data Platform &middot; JPMorgan Chase</span>
+          <h3>Automating a 4-million-record bank consolidation</h3>
+          <p>Corporate Banking was merging into Commercial &amp; Investment Banking. I orchestrated the
+            migration, then shipped an AI chatbot and a RAG assistant so two different manual-lookup problems
+            disappeared for good.</p>
+          <div class="case-metrics">
+            <div><div class="case-metric-num">4M+</div><div class="case-metric-label">records migrated</div></div>
+            <div><div class="case-metric-num">60%</div><div class="case-metric-label">faster reporting</div></div>
+            <div><div class="case-metric-num">$10K/mo</div><div class="case-metric-label">compute saved</div></div>
+          </div>
+          <span class="case-link">Read the case study <span class="arrow">&rarr;</span></span>
+        </a>
+
+        <a href="case-study-hierarchy.html" class="case-card accent-coral">
+          <span class="case-tag">LLM Tooling &middot; JPMorgan Chase</span>
+          <h3>An ownership-hierarchy tool relationship teams could actually query</h3>
+          <p>Private-equity ownership structures are deep and change constantly. I built a natural-language
+            tool that recalculates cascading value changes across every parent instantly &mdash; try a live
+            recreation of it right on this page.</p>
+          <div class="case-metrics">
+            <div><div class="case-metric-num">Multi-tier</div><div class="case-metric-label">ownership graphs</div></div>
+            <div><div class="case-metric-num">Instant</div><div class="case-metric-label">cascading recalculation</div></div>
+          </div>
+          <span class="case-link">Read the case study + try the demo <span class="arrow">&rarr;</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="section-inner">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">More work</p>
+          <h2>Other things I've shipped</h2>
+        </div>
+      </div>
+      <div class="work-grid">
+        <div class="work-card">
+          <h4>Confluence Knowledge Assistant</h4>
+          <span class="work-tag">RAG chatbot &middot; JPMorgan Chase</span>
+          <p>Crawled and chunked a team's entire Confluence space and embedded it for natural-language Q&amp;A,
+            replacing manual documentation search.</p>
+        </div>
+        <div class="work-card">
+          <h4>PII Data-Masking Pipeline</h4>
+          <span class="work-tag">Security &middot; JPMorgan Chase</span>
+          <p>Field-level redaction plus SHA-based hashing (upgraded SHA-1 &rarr; SHA-2 &rarr; SHA-3 over time)
+            across every production-to-UAT refresh.</p>
+        </div>
+        <div class="work-card">
+          <h4>Bug-Report Auto-Classifier</h4>
+          <span class="work-tag">NLP &middot; Bosch</span>
+          <p>Trained a BERT-based pipeline that cut manual triage effort 40%, plus dynamic Android Auto display
+            configs for in-car infotainment.</p>
+        </div>
+        <div class="work-card">
+          <h4>Bixby Sports NLP Capsule</h4>
+          <span class="work-tag">NLP &middot; Samsung Research</span>
+          <p>Shipped intent/entity recognition improvements lifting query-processing accuracy 20% for 500K+
+            monthly Bixby users.</p>
+        </div>
+        <div class="work-card">
+          <h4>Estately</h4>
+          <span class="work-tag">Personal project</span>
+          <p>Real-estate aggregation platform for Bangalore using sentiment analysis to forecast price trends
+            and generate area-growth heat maps.</p>
+        </div>
+        <div class="work-card">
+          <h4>Padh.AI</h4>
+          <span class="work-tag">2nd place, JPMorgan Code for Good Hackathon</span>
+          <p>Matched NGO mentors and mentees with integrated YouTube/WhatsApp outreach and live video
+            mentoring, built on Firebase, PostgreSQL, and Next.js.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="section">
+    <div class="section-inner">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">Background</p>
+          <h2>Experience &amp; education</h2>
+        </div>
+      </div>
       <div class="timeline">
 
         <div class="timeline-item">
-          <div class="timeline-meta">
-            <span class="timeline-role">Software Analyst, Full-Time</span>
-            <span class="timeline-org">JPMorgan Chase &amp; Co.</span>
-            <span class="timeline-date">Aug 2024 &ndash; Aug 2026</span>
+          <div class="timeline-when">Aug 2026 &ndash; May 2028<br>Philadelphia, PA</div>
+          <div>
+            <div class="timeline-role">MSE, Computer &amp; Information Science</div>
+            <span class="timeline-org">University of Pennsylvania</span>
+            <ul class="timeline-points">
+              <li>Coursework: Applied Machine Learning, Artificial Intelligence, Database and Information Systems.</li>
+              <li>Teaching Assistant, Discrete Math for Computer and Information Science.</li>
+            </ul>
           </div>
-          <ul class="timeline-points">
-            <li>Led migration of ~4M cost centers during a Corporate&nbsp;&rarr;&nbsp;Commercial &amp; Investment Banking consolidation, orchestrated with Apache Airflow + Python. Shipped an AI-agent chatbot for instant migration-status lookups.</li>
-            <li>Migrated a legacy app to AWS ECS on Java 17 (&minus;60% report generation time); cut Airflow/EMR compute cost 25% (~$10K/mo saved); sped up 5GB+ transfers 25% via S3 multipart uploads.</li>
-            <li>Built a RAG chatbot over the team's Confluence space &mdash; crawled, chunked, and embedded every page so natural-language questions retrieve the right passage instantly.</li>
-            <li>Designed an end-to-end Java service consolidating two legacy profitability apps into GBIQ; separately built a CBCMP profitability ETL pipeline.</li>
-            <li>Engineered a PII data-masking pipeline (field redaction + SHA-1&rarr;SHA-2&rarr;SHA-3 hashing) across every production-to-UAT refresh.</li>
-          </ul>
         </div>
 
         <div class="timeline-item">
-          <div class="timeline-meta">
-            <span class="timeline-role">Software Engineering Intern</span>
+          <div class="timeline-when">Aug 2024 &ndash; Aug 2026<br>Bangalore, India</div>
+          <div>
+            <div class="timeline-role">Software Analyst, Full-Time</div>
             <span class="timeline-org">JPMorgan Chase &amp; Co.</span>
-            <span class="timeline-date">Feb 2024 &ndash; Jul 2024</span>
+            <ul class="timeline-points">
+              <li>See the migration case study above for the full story &mdash; cost-center migration, AI chatbot, AWS ECS migration, GBIQ/CBCMP, Confluence RAG assistant, PII masking pipeline.</li>
+              <li>Competed in internal hackathons, mentored incoming SWE Program graduates, hosted Innovation Week and ProdCon.</li>
+            </ul>
           </div>
-          <ul class="timeline-points">
-            <li>Built an LLM-powered natural-language query tool visualizing multi-tier parent-child ownership structures for Financial Sponsors, auto-recalculating cascading hierarchy shifts from a single investment change.</li>
-          </ul>
         </div>
 
         <div class="timeline-item">
-          <div class="timeline-meta">
-            <span class="timeline-role">Summer Intern</span>
+          <div class="timeline-when">Feb 2024 &ndash; Jul 2024<br>Bangalore, India</div>
+          <div>
+            <div class="timeline-role">Software Engineering Intern</div>
+            <span class="timeline-org">JPMorgan Chase &amp; Co.</span>
+            <ul class="timeline-points">
+              <li>Built the LLM-powered ownership-hierarchy tool &mdash; full case study above, with a live demo.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-when">Jul 2023 &ndash; Nov 2023<br>Bangalore, India</div>
+          <div>
+            <div class="timeline-role">Summer Intern</div>
             <span class="timeline-org">Bosch</span>
-            <span class="timeline-date">Jul 2023 &ndash; Nov 2023</span>
+            <ul class="timeline-points">
+              <li>BERT-based bug-report auto-classifier (&minus;40% manual triage); Android Auto display configs.</li>
+            </ul>
           </div>
-          <ul class="timeline-points">
-            <li>Trained a BERT-based NLP pipeline to auto-classify bug reports, cutting manual triage effort 40%.</li>
-            <li>Added dynamic Android Auto display configurations for in-car infotainment.</li>
-          </ul>
         </div>
 
         <div class="timeline-item">
-          <div class="timeline-meta">
-            <span class="timeline-role">Intern</span>
+          <div class="timeline-when">Oct 2022 &ndash; Jan 2023<br>Bangalore, India</div>
+          <div>
+            <div class="timeline-role">Intern</div>
             <span class="timeline-org">Samsung Research</span>
-            <span class="timeline-date">Oct 2022 &ndash; Jan 2023</span>
+            <ul class="timeline-points">
+              <li>Sports NLP capsule for Bixby &mdash; +20% query-processing accuracy for 500K+ monthly users.</li>
+            </ul>
           </div>
-          <ul class="timeline-points">
-            <li>Shipped a sports NLP capsule for Bixby using TensorFlow + spaCy, lifting query-processing accuracy 20% for 500K+ monthly users.</li>
-          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-when">Jun 2020 &ndash; Jun 2024<br>Bangalore, India</div>
+          <div>
+            <div class="timeline-role">Bachelor of Engineering</div>
+            <span class="timeline-org">BMS College of Engineering &middot; CGPA 9.46/10</span>
+          </div>
         </div>
 
       </div>
     </div>
   </section>
 
-  <section id="demo" class="section">
+  <section class="section section-alt">
     <div class="section-inner">
-      <h2>Live demo: ownership hierarchy visualizer</h2>
-      <p class="section-sub">
-        A simplified, from-scratch recreation of the tool I built for Financial Sponsors at JPMorgan: a
-        parent-child ownership tree where changing one investment cascades value changes up through every
-        parent automatically. Click a leaf node's value to edit it.
-      </p>
-      <div id="hierarchy-root" class="hierarchy-card"></div>
-    </div>
-  </section>
-
-  <section id="projects" class="section section-alt">
-    <div class="section-inner">
-      <h2>Projects</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>Estately</h3>
-          <p class="card-tag">Real estate discovery platform &middot; Personal project</p>
-          <p>Aggregation platform for Bangalore real estate consolidating builder track records and project
-            histories, using statistical and sentiment analysis to forecast price trends and generate
-            area-growth heat maps. Swipe-based discovery UI with a referral-funded pricing model that pays
-            users back instead of charging them.</p>
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">Toolbox</p>
+          <h2>Technical skills</h2>
         </div>
-        <div class="card">
-          <h3>Padh.AI</h3>
-          <p class="card-tag">Mentor-mentee platform &middot; 2nd place, JPMorgan Code for Good Hackathon</p>
-          <p>Matches NGO mentors and mentees, integrating YouTube and WhatsApp APIs to expand outreach and
-            enabling live video mentoring sessions. Built with Firebase, PostgreSQL, and Next.js.</p>
-        </div>
-        <div class="card">
-          <h3>Confluence Knowledge Assistant</h3>
-          <p class="card-tag">RAG chatbot &middot; JPMorgan Chase</p>
-          <p>Crawled and chunked an entire team Confluence space, embedded the chunks, and served
-            natural-language Q&amp;A over it &mdash; replacing manual documentation search with conversation.</p>
-        </div>
+      </div>
+      <div class="skills-row">
+        <span class="pill">Java</span><span class="pill">Python</span><span class="pill">C++</span>
+        <span class="pill">SQL</span><span class="pill">JavaScript</span>
+        <span class="pill">TensorFlow</span><span class="pill">PyTorch</span><span class="pill">Keras</span>
+        <span class="pill">BERT</span><span class="pill">LSTM</span><span class="pill">spaCy</span>
+        <span class="pill">NLTK</span><span class="pill">Pandas</span><span class="pill">NumPy</span>
+        <span class="pill">AWS (S3, ECS, Glue, Lambda)</span><span class="pill">Apache Spark</span>
+        <span class="pill">Apache Airflow</span><span class="pill">Docker</span><span class="pill">Kubernetes</span>
+        <span class="pill">Terraform</span>
       </div>
     </div>
   </section>
 
-  <section id="skills" class="section">
+  <section id="contact" class="section contact-section">
     <div class="section-inner">
-      <h2>Technical Skills</h2>
-      <div class="skills-grid">
-        <div class="skill-group">
-          <h4>Languages</h4>
-          <p>Java, Python, C++, SQL, JavaScript</p>
-        </div>
-        <div class="skill-group">
-          <h4>ML / AI</h4>
-          <p>TensorFlow, PyTorch, Keras, BERT, LSTM, NLP (spaCy, NLTK), Pandas, NumPy</p>
-        </div>
-        <div class="skill-group">
-          <h4>Cloud &amp; Data</h4>
-          <p>AWS (S3, ECS, Glue, Lambda), Apache Spark, Apache Airflow, Docker, Kubernetes, Terraform</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="section section-alt contact-section">
-    <div class="section-inner">
-      <h2>Get in touch</h2>
-      <p class="section-sub">Open to Summer 2027 software engineering and applied ML internships.</p>
+      <p class="section-kicker">Get in touch</p>
+      <h2>Open to Summer 2027 software engineering and applied ML internships.</h2>
       <div class="contact-links">
         <a href="mailto:kushalkumarpotta@gmail.com">kushalkumarpotta@gmail.com</a>
         <a href="https://linkedin.com/in/kushal-kumar-potta" target="_blank" rel="noopener">LinkedIn</a>
@@ -175,6 +268,5 @@
   <p>Built by Kushal, with Claude.</p>
 </footer>
 
-<script src="hierarchy.js"></script>
 </body>
 </html>

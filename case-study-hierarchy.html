@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kushal Kumar Potta — Ownership Hierarchy Visualizer</title>
+<meta name="description" content="How Kushal Kumar Potta built an LLM-powered ownership-hierarchy tool at JPMorgan Chase — with a live, interactive recreation you can try." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Kushal Kumar Potta</a>
+    <div class="nav-links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#contact" class="nav-cta">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="case-hero">
+  <div class="case-hero-inner">
+    <a href="index.html#work" class="back-link">&larr; Back to portfolio</a>
+    <p class="eyebrow" style="color: var(--accent2);">LLM Tooling &middot; JPMorgan Chase &middot; Financial Sponsors &middot; Feb &ndash; Jul 2024</p>
+    <h1>An ownership-hierarchy tool relationship teams could actually query</h1>
+    <p class="role-line">Software Engineering Intern. Financial Sponsors covers private-equity-owned clients,
+      whose ownership structures are deep, multi-tier, and constantly shifting. I built a tool that answers
+      questions about them in plain language and recalculates the whole tree the instant something changes.</p>
+  </div>
+</header>
+
+<div class="case-body">
+
+  <div class="case-block">
+    <h2>The problem</h2>
+    <p>A private-equity sponsor's portfolio isn't a flat list &mdash; it's a tree of holding companies,
+      sub-holdings, and operating entities, several layers deep. When one investment's value changes, that
+      change ripples upward through every parent above it. Relationship teams needed a way to see that ripple
+      instantly and ask questions about the structure in plain language, instead of manually tracing a
+      spreadsheet every time something moved.</p>
+  </div>
+
+  <div class="case-block">
+    <h2>What I built</h2>
+    <p>A Python tool with LLM-powered natural-language querying that visualizes multi-tier parent-child
+      ownership structures. Change one investment's value, and the tool automatically recalculates every
+      cascading shift up the hierarchy &mdash; giving relationship teams instant clarity on portfolio-wide
+      impact instead of a manual re-trace.</p>
+    <div class="callout coral">
+      Try a simplified, from-scratch recreation of the actual interaction pattern below &mdash; built for this
+      site, not the original JPMorgan tool. All company names and figures in the demo are entirely fictional.
+    </div>
+  </div>
+
+  <div class="case-block">
+    <h2>Try it live</h2>
+    <p>Click any blue-bordered leaf box to change its value, and watch every parent total above it
+      recalculate with an animated cascade.</p>
+    <div id="hierarchy-root" class="hierarchy-card"></div>
+  </div>
+
+  <div class="case-block">
+    <h2>Why it mattered</h2>
+    <ul>
+      <li>Relationship teams got instant, portfolio-wide clarity on impact instead of manually re-tracing a
+        hierarchy every time an investment changed.</li>
+      <li>Natural-language querying meant the tool didn't require knowing the exact structure of the
+        underlying data to get an answer &mdash; a pattern that shows up again in the Confluence RAG assistant
+        and migration-status chatbot described in the other case study.</li>
+    </ul>
+  </div>
+
+  <div class="case-block">
+    <a href="index.html#work" class="btn btn-ghost">&larr; Back to all work</a>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p>Built by Kushal, with Claude.</p>
+</footer>
+
+<script src="hierarchy.js"></script>
+</body>
+</html>

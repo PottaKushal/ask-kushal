@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kushal Kumar Potta — Migration &amp; Automation Case Study</title>
+<meta name="description" content="How Kushal Kumar Potta automated a 4-million-record bank consolidation at JPMorgan Chase with Airflow, an AI chatbot, and a RAG assistant." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Kushal Kumar Potta</a>
+    <div class="nav-links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#contact" class="nav-cta">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="case-hero">
+  <div class="case-hero-inner">
+    <a href="index.html#work" class="back-link">&larr; Back to portfolio</a>
+    <p class="eyebrow">AI &amp; Data Platform &middot; JPMorgan Chase &middot; Aug 2024 &ndash; Aug 2026</p>
+    <h1>Automating a 4-million-record bank consolidation</h1>
+    <p class="role-line">Software Analyst, Full-Time. When Corporate Banking consolidated into Commercial &amp;
+      Investment Banking, I owned the migration pipeline and built two AI tools that permanently removed
+      manual lookup work for other teams.</p>
+  </div>
+</header>
+
+<div class="case-body">
+
+  <div class="case-block">
+    <h2>The problem</h2>
+    <p>Corporate Banking was consolidating into Commercial &amp; Investment Banking &mdash; a reorganization
+      that touched roughly four million cost centers spread across multiple environments. Beyond the raw
+      migration, two second-order problems showed up immediately: Finance had no way to check migration status
+      without pinging an engineer directly, and the team's documentation had grown into a Confluence space so
+      large that finding anything meant asking someone who'd been there long enough to remember where it was.</p>
+  </div>
+
+  <div class="case-block">
+    <h2>What I built</h2>
+    <p><strong>Migration orchestration.</strong> Used Apache Airflow and Python scripts to orchestrate the
+      cost-center migration across environments in a controlled, auditable way rather than a manual,
+      environment-by-environment push.</p>
+    <p><strong>An AI-agent chatbot for migration status.</strong> Finance no longer needed to file a request
+      and wait &mdash; the chatbot gave instant, consolidated status lookups on demand, replacing a manual
+      process that didn't scale with four million records in flight.</p>
+    <p><strong>A RAG assistant over the team's Confluence space.</strong> Crawled and chunked every page,
+      embedded the chunks, and served natural-language Q&amp;A over the result &mdash; so "where's the doc on
+      X" became a question you could just ask, instead of a hallway conversation.</p>
+    <p><strong>Infrastructure work alongside the migration:</strong></p>
+    <ul>
+      <li>Migrated a legacy application to AWS ECS on Java 17.</li>
+      <li>Streamlined Airflow DAGs' EMR usage to cut per-run compute cost.</li>
+      <li>Sped up 5GB+ transfers with an S3 multipart upload strategy.</li>
+      <li>Designed an end-to-end Java service (controller/service/repository layers, token-based
+        client-to-client auth) consolidating two legacy profitability applications into GBIQ, and separately
+        built a CBCMP profitability report and ETL pipeline reconciling post-merger data.</li>
+      <li>Engineered a PII data-masking pipeline &mdash; field-level redaction plus SHA-based hashing, upgraded
+        over time from SHA-1 to SHA-2 to SHA-3 &mdash; run on every production-to-UAT refresh.</li>
+    </ul>
+    <div class="callout">
+      The chatbot and the RAG assistant solved the same underlying problem in two different shapes: someone
+      needs an answer that currently only exists in a person's head or a wall of documentation. That pattern
+      is why this site's own build process leaned on the same idea &mdash; grounding an assistant in a fixed
+      body of content instead of a person's memory.
+    </div>
+  </div>
+
+  <div class="case-block">
+    <h2>Impact</h2>
+    <div class="impact-grid">
+      <div class="impact-item">
+        <div class="impact-num">4M+</div>
+        <div class="impact-label">cost centers migrated</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">&minus;60%</div>
+        <div class="impact-label">report generation time after ECS migration</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">~$10K/mo</div>
+        <div class="impact-label">saved by streamlining Airflow/EMR usage</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">&minus;25%</div>
+        <div class="impact-label">EMR compute cost per run</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">+25%</div>
+        <div class="impact-label">faster 5GB+ transfers via S3 multipart</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">SHA-1&rarr;3</div>
+        <div class="impact-label">PII hashing upgraded firmwide over time</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-block">
+    <a href="index.html#work" class="btn btn-ghost">&larr; Back to all work</a>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p>Built by Kushal, with Claude.</p>
+</footer>
+
+</body>
+</html>

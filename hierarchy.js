@@ -6,33 +6,36 @@
   const root = document.getElementById("hierarchy-root");
   if (!root) return;
 
-  // Tree: a PE sponsor owning stakes in portfolio companies, which in turn
-  // hold sub-entities. Values are illustrative ($M), editable at the leaves.
+  // Tree: a *fictional* PE sponsor owning stakes in *fictional* portfolio
+  // companies, which in turn hold *fictional* sub-entities. Names are made
+  // up specifically to avoid resembling any real company (checked against
+  // web search), and every value is an illustrative placeholder, not real
+  // data. This is a demo of the interaction pattern only.
   const tree = {
-    name: "Meridian Capital Partners",
+    name: "Fictional Capital Partners (demo)",
     value: 0,
     children: [
       {
-        name: "Northwind Logistics Holdco",
+        name: "Placeholder Freight Holdco",
         value: 0,
         children: [
-          { name: "Northwind Freight US", value: 140, editable: true },
-          { name: "Northwind Freight EU", value: 95, editable: true },
+          { name: "Placeholder Freight — Region A", value: 140, editable: true },
+          { name: "Placeholder Freight — Region B", value: 95, editable: true },
         ],
       },
       {
-        name: "Beacon Health Group",
+        name: "Placeholder Health Holdco",
         value: 0,
         children: [
-          { name: "Beacon Clinical Labs", value: 210, editable: true },
-          { name: "Beacon Diagnostics", value: 130, editable: true },
-          { name: "Beacon Home Care", value: 60, editable: true },
+          { name: "Placeholder Clinical Labs Co.", value: 210, editable: true },
+          { name: "Placeholder Diagnostics Co.", value: 130, editable: true },
+          { name: "Placeholder Home Care Co.", value: 60, editable: true },
         ],
       },
       {
-        name: "Solstice Retail Holdco",
+        name: "Placeholder Retail Holdco",
         value: 0,
-        children: [{ name: "Solstice Direct-to-Consumer", value: 175, editable: true }],
+        children: [{ name: "Placeholder Retail — DTC Unit", value: 175, editable: true }],
       },
     ],
   };
@@ -187,7 +190,7 @@
     const caption = document.createElement("p");
     caption.style.cssText = "color:#656d80;font-size:0.78rem;margin:14px 0 0;";
     caption.textContent =
-      "Blue-bordered boxes are editable leaf investments. Change one and every parent total recalculates instantly.";
+      "Blue-bordered boxes are editable leaf investments — change one and every parent total recalculates instantly. All names and figures here are entirely fictional, invented for this demo only.";
     root.appendChild(caption);
   }
 

@@ -1,39 +1,30 @@
-# Kushal Kumar Potta — portfolio site
+# Kushal Kumar Potta — portfolio site (v3, full redesign)
 
-A one-page portfolio to link from your resume, built from the content on `Kushal Kumar Potta Resume 4.pdf`.
+An impact-led portfolio: a bold homepage that leads with numbers, two deep-dive case study pages, and a live
+interactive demo embedded in one of them. No backend, no API keys, nothing to configure — fully static.
 
-**What it is:**
-- A clean hero, experience timeline, projects, skills, and contact section.
-- **A live, interactive ownership-hierarchy demo** — a from-scratch recreation of the parent-child ownership
-  visualizer you built for Financial Sponsors at JPMorgan. Click a leaf investment value to edit it and watch
-  every parent total recalculate instantly (`hierarchy.js`, pure SVG + vanilla JS, no dependencies).
+## Pages
 
-No backend, no API keys, no accounts, nothing to configure or ever get billed for. It's fully static.
+- `index.html` — homepage: hero with a stat strip, two case-study cards, a grid of smaller projects, a
+  compact experience/education timeline, skills, and contact.
+- `case-study-migration.html` — deep dive on the JPMorgan cost-center migration, AI chatbot, Confluence RAG
+  assistant, and infra work (AWS ECS, Airflow/EMR, S3, GBIQ/CBCMP, PII masking).
+- `case-study-hierarchy.html` — deep dive on the Financial Sponsors ownership-hierarchy tool, with a live,
+  click-to-edit recreation of the interaction pattern embedded on the page.
+- `hierarchy.js` — the interactive demo logic (pure SVG + vanilla JS, no dependencies). All company names and
+  values in it are intentionally fictional (checked against real companies) — see the comment at the top of
+  the file before changing them.
+- `styles.css` — the whole design system: color tokens, typography (Space Grotesk + Inter via Google Fonts),
+  and every component style.
 
----
+## Deploy steps (GitHub Pages)
 
-## Deploy steps (GitHub Pages — free, no extra signups)
+Same as before — this is still a fully static site, multiple HTML files work with GitHub Pages with zero
+configuration:
 
-You already have this code in `github.com/PottaKushal/ask-kushal`. To make it a live site:
-
-1. Go to your repo on GitHub → **Settings** → **Pages** (left sidebar, under "Code and automation").
-2. Under **Build and deployment → Source**, choose **Deploy from a branch**.
-3. Branch: `main`, folder: `/ (root)`. Click **Save**.
-4. Wait a minute or two, then refresh that Pages settings page — it'll show your live URL, something like
-   `https://pottakushal.github.io/ask-kushal/`.
-
-Every time you `git push` to `main`, the live site updates automatically within a minute or so.
-
-### Alternative: Vercel or Netlify
-
-Either also hosts static sites for free — import the GitHub repo, leave build settings empty (there's no
-build step), deploy. Useful mainly if you want a nicer custom-domain flow later.
-
-### Put the link on your resume
-
-`kushalkumarpotta@gmail.com | linkedin.com/in/kushal-kumar-potta | github.com/PottaKushal | pottakushal.github.io/ask-kushal`
-
----
+1. `github.com/PottaKushal/ask-kushal` → **Settings** → **Pages**.
+2. Source: **Deploy from a branch** → branch `main`, folder `/ (root)` → **Save**.
+3. Your live URL (e.g. `pottakushal.github.io/ask-kushal`) updates automatically on every push to `main`.
 
 ## Testing locally
 
@@ -42,13 +33,13 @@ cd ask-kushal
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+Then open `http://localhost:8000`. Check both `index.html` and the two case study pages, and click into the
+hierarchy demo on the hierarchy case-study page.
 
----
+## Updating content later
 
-## Updating the content later
-
-- **Resume/experience text shown on the page**: edit the relevant `<section>` in `index.html`.
-- **Hierarchy demo data**: the sample company names/values are illustrative, in `hierarchy.js` near the top
-  (the `tree` object) — change them to whatever story you want to tell, or leave as-is since it's clearly a
-  demo, not real portfolio data.
+- **Homepage copy, stats, project cards**: edit `index.html` directly.
+- **Case study narrative**: edit the relevant `case-study-*.html` file — each follows a Problem → What I
+  built → Impact structure; keep that shape when you add detail.
+- **Colors/type/spacing**: everything lives in the `:root` variables at the top of `styles.css`.
+- **Hierarchy demo data**: `hierarchy.js`, the `tree` object near the top. Keep names obviously fictional.
