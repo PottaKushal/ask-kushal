@@ -30,8 +30,8 @@
     <a href="index.html#work" class="back-link">&larr; Back to portfolio</a>
     <p class="eyebrow">AI &amp; Data Platform &middot; JPMorgan Chase &middot; Aug 2024 &ndash; Aug 2026</p>
     <h1>Automating a 4-million-record bank consolidation</h1>
-    <p class="role-line">Software Analyst, Full-Time. When Corporate Banking consolidated into Commercial &amp;
-      Investment Banking, I owned the migration pipeline and built two AI tools that permanently removed
+    <p class="role-line">Software Analyst, Full-Time. When Commercial Banking (CB) merged into Corporate and
+      Investment Banking (CIB), I designed the migration system and built two AI tools that permanently removed
       manual lookup work for other teams.</p>
   </div>
 </header>
@@ -40,7 +40,7 @@
 
   <div class="case-block">
     <h2>The problem</h2>
-    <p>Corporate Banking was consolidating into Commercial &amp; Investment Banking &mdash; a reorganization
+    <p>CB was consolidating into CIB &mdash; a reorganization
       that touched roughly four million cost centers spread across multiple environments. Beyond the raw
       migration, two second-order problems showed up immediately: Finance had no way to check migration status
       without pinging an engineer directly, and the team's documentation had grown into a Confluence space so
@@ -49,9 +49,9 @@
 
   <div class="case-block">
     <h2>What I built</h2>
-    <p><strong>Migration orchestration.</strong> Used Apache Airflow and Python scripts to orchestrate the
-      cost-center migration across environments in a controlled, auditable way rather than a manual,
-      environment-by-environment push.</p>
+    <p><strong>The migration system.</strong> I designed the migration system: Airflow-orchestrated batches,
+      a 7-layer Python rule engine, Databricks for batch processing, then my validation layer. The validation
+      layer is the part I am proudest of.</p>
     <p><strong>An AI-agent chatbot for migration status.</strong> Finance no longer needed to file a request
       and wait &mdash; the chatbot gave instant, consolidated status lookups on demand, replacing a manual
       process that didn't scale with four million records in flight.</p>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kushal Kumar Potta — Infrastructure Projects for Tesla</title>
-<meta name="description" content="How Kushal Kumar Potta turns production problems into permanent fixes: an Airflow pipeline optimization, a hash-validated 4M cost-center migration, and a Confluence RAG chatbot." />
+<title>Kushal Kumar Potta | Infrastructure Projects</title>
+<meta name="description" content="How Kushal Kumar Potta turns production problems into permanent fixes: an Airflow pipeline fix, a hash-validated 4M cost-center migration, and a Confluence RAG chatbot." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -362,72 +362,274 @@
     .reveal { opacity: 1; transform: none; transition: none; }
     .rt-bar, .rt-saved, .rt-val, .f-bar { transition: none !important; }
   }
-  /* ---------- projects-infra additions ---------- */
+  /* ---------- projects-infra ---------- */
   .hero h1 { max-width: 860px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 
-  /* "How I found and fixed it" step flow */
-  .steps-wrap { margin-bottom: 28px; }
-  .steps { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
-  .steps-rail { position: absolute; left: 20px; right: 20px; top: 19px; height: 2px; background: var(--card-border); }
-  .steps-rail span {
-    display: block; height: 100%; width: 0;
-    background: linear-gradient(90deg, var(--text-faint), var(--accent2) 45%, var(--accent));
-    transition: width 2.6s cubic-bezier(.4,.1,.2,1);
-  }
-  .steps.in .steps-rail span { width: 100%; }
-  .step {
-    position: relative; opacity: 0; transform: translateY(14px);
-    transition: opacity .55s ease, transform .55s ease;
-    transition-delay: calc(var(--i) * 0.5s);
-  }
-  .steps.in .step { opacity: 1; transform: none; }
-  .step-dot {
-    position: relative; z-index: 1;
-    width: 40px; height: 40px; border-radius: 50%;
-    display: grid; place-items: center;
-    background: var(--bg); border: 2px solid var(--card-border);
-    font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--text-dim);
-    margin-bottom: 14px;
-    transition: border-color .4s ease, color .4s ease, background .4s ease;
-    transition-delay: calc(var(--i) * 0.5s + .2s);
-  }
-  .steps.in .step-dot { border-color: var(--sc, var(--text-dim)); color: var(--sc, var(--text)); }
-  .step.cause { --sc: var(--accent2); }
-  .step.fix, .step.verify { --sc: var(--accent); }
-  .steps.in .step.verify .step-dot { background: var(--accent); color: var(--accent-ink); }
-  .step-card {
+  /* Click-through diagram shell */
+  .dg { padding: 26px 28px 22px; }
+  .dg:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .dg-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+  .dg-num { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+  .dg-title { font-family: var(--font-display); font-weight: 700; font-size: 1.55rem; line-height: 1.15; margin-top: 4px; }
+  .dg-note { color: var(--text-faint); font-size: 0.8rem; }
+  .dg-stage {
+    position: relative; height: 370px; overflow: hidden;
     background: var(--bg); border: 1px solid var(--card-border); border-radius: var(--radius);
-    padding: 16px; height: calc(100% - 54px);
   }
-  .step.cause .step-card { border-color: rgba(255,84,112,0.4); }
-  .step.fix .step-card, .step.verify .step-card { border-color: rgba(200,255,77,0.35); }
-  .step-kicker { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sc, var(--text-faint)); }
-  .step h4 { font-size: 1rem; margin: 4px 0 8px; line-height: 1.25; }
-  .step p { color: var(--text-dim); font-size: 0.84rem; margin: 0; line-height: 1.5; }
-  .step ol { list-style: none; margin: 0; padding: 0; counter-reset: rc; }
-  .step ol li {
-    counter-increment: rc; position: relative; padding-left: 24px;
-    color: var(--text-dim); font-size: 0.82rem; line-height: 1.45; margin-bottom: 8px;
+  .dg-cap { font-size: 1.12rem; line-height: 1.5; color: var(--text); margin: 16px 0 16px; min-height: 3em; max-width: 900px; }
+  .dg-ctrl { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .dg-ctrl .btn { padding: 10px 20px; font-size: 0.92rem; }
+  .dg-ctrl .btn[disabled] { opacity: .35; cursor: default; transform: none; }
+  .dg-dots { display: flex; gap: 8px; align-items: center; padding: 0 6px; }
+  .dg-dots button {
+    all: unset; cursor: pointer; width: 12px; height: 12px; border-radius: 999px;
+    background: var(--card-border); transition: width .25s ease, background .25s ease;
   }
-  .step ol li:last-child { margin-bottom: 0; }
-  .step ol li::before {
-    content: counter(rc); position: absolute; left: 0; top: 1px;
-    width: 16px; height: 16px; border-radius: 4px; display: grid; place-items: center;
-    font-size: 0.66rem; font-weight: 700; background: var(--sc); color: var(--accent-ink);
-  }
-  .step.verify ol li { color: var(--text); font-weight: 600; }
-  .steps-note { color: var(--text-faint); font-size: 0.78rem; margin-top: 16px; }
+  .dg-dots button[aria-current="step"] { width: 30px; background: var(--accent); }
+  .dg-dots button.done { background: rgba(200,255,77,0.45); }
+  .dg-dots button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .dg-reset { margin-left: auto; }
+  .dg-keys { color: var(--text-faint); font-size: 0.78rem; }
+  .dg-keys kbd { font-family: var(--font-body); border: 1px solid var(--card-border); border-radius: 5px; padding: 1px 6px; color: var(--text-dim); }
 
-  /* Funnel one-line callout */
+  /* ---------- Airflow diagram ---------- */
+  .gt { position: absolute; left: 24px; right: 24px; top: 22px; bottom: 34px; }
+  .gt.zoom { animation: zoomOut .9s cubic-bezier(.2,.8,.2,1); }
+  @keyframes zoomOut { from { transform: scale(1.12); } to { transform: scale(1); } }
+  .gt-row { position: absolute; left: 0; right: 0; height: 46px; transition: opacity .5s ease; }
+  .gt-name {
+    position: absolute; left: 0; top: 0; width: 132px; height: 30px;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.95rem; font-weight: 600; color: var(--text);
+  }
+  .gt-name .par {
+    font-size: 0.6rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--accent); color: var(--accent-ink); padding: 2px 6px; border-radius: 999px;
+    opacity: 0; transition: opacity .4s ease .5s;
+  }
+  .gt-track { position: absolute; left: 140px; right: 0; top: 0; bottom: 0; }
+  .job, .inst-used, .inst-idle { position: absolute; transition: left .8s cubic-bezier(.4,.1,.2,1), width .8s cubic-bezier(.4,.1,.2,1), height .6s ease, top .6s ease, background .4s ease, border-color .4s ease; }
+  .job {
+    top: 0; height: 30px; border-radius: 6px;
+    background: rgba(255,255,255,0.13); border: 1px solid rgba(255,255,255,0.22);
+  }
+  .inst-used, .inst-idle { top: 35px; height: 11px; }
+  .inst-used { border-radius: 3px 0 0 3px; background: #3c3c46; }
+  .inst-idle { border-radius: 0 3px 3px 0; background: #3c3c46; }
+  .gt-axis { position: absolute; left: 164px; right: 24px; bottom: 8px; height: 18px; }
+  .gt-axis span { position: absolute; transform: translateX(-50%); font-size: 0.72rem; color: var(--text-faint); }
+  .gt-end {
+    position: absolute; top: -10px; bottom: -6px; width: 0; border-left: 2px dashed var(--text);
+    opacity: 0; transition: left .8s cubic-bezier(.4,.1,.2,1), opacity .4s ease, border-color .4s ease;
+  }
+  .gt-end.lab-left b { left: auto; right: 8px; }
+  .gt-end b {
+    position: absolute; bottom: -2px; left: 8px; white-space: nowrap;
+    font-family: var(--font-display); font-size: 1.05rem; color: var(--text);
+    background: var(--bg); padding: 0 4px;
+  }
+
+  /* step states */
+  #airStage[data-step="1"] .gt-end, #airStage[data-step="5"] .gt-end { opacity: 1; }
+  #airStage[data-step="5"] .gt-end { border-color: var(--accent); }
+  #airStage[data-step="5"] .gt-end b { color: var(--accent); }
+  #airStage[data-step="2"] .gt-row:not(.pull), #airStage[data-step="3"] .gt-row:not(.pull) { opacity: .28; }
+  #airStage[data-step="2"] .pull .job { background: var(--accent2); border-color: var(--accent2); }
+  #airStage[data-step="3"] .pull .job,
+  #airStage[data-step="4"] .pull .job,
+  #airStage[data-step="5"] .pull .job { background: rgba(200,255,77,0.35); border-color: var(--accent); }
+  #airStage[data-step="4"] .inst-used { background: #8a8a93; }
+  #airStage[data-step="4"] .inst-idle {
+    background: repeating-linear-gradient(135deg, rgba(255,84,112,0.85) 0 4px, rgba(255,84,112,0.25) 4px 8px);
+  }
+  #airStage[data-step="5"] .inst-used { background: var(--accent); height: 5px; top: 37px; border-radius: 3px; }
+  #airStage[data-step="5"] .inst-idle { height: 5px; top: 37px; }
+  #airStage[data-step="5"] .gt-name .par { opacity: 1; }
+
+  /* Side panels (one per step) */
+  .ap {
+    position: absolute; top: 18px; right: 22px; width: 46%;
+    background: var(--card); border: 1px solid var(--card-border); border-radius: 14px;
+    padding: 14px 16px; opacity: 0; transform: translateY(8px); pointer-events: none;
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .ap.narrow { width: auto; right: auto; left: 47%; }
+  .ap.res { width: auto; left: 63%; }
+  .ap.on { opacity: 1; transform: none; pointer-events: auto; transition-delay: .25s; }
+  .ap-title { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; }
+  .ap-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.86rem; color: var(--text-dim); }
+  .ap-legend i { display: inline-block; width: 22px; height: 10px; border-radius: 3px; vertical-align: 0; margin-right: 7px; }
+
+  .gauge { position: relative; height: 16px; border-radius: 999px; background: rgba(255,255,255,0.07); margin: 30px 0 30px; }
+  .gauge-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 30.6%; border-radius: 999px; background: var(--accent); }
+  .ap.on .gauge-fill { animation: gaugeGrow 1.8s cubic-bezier(.5,0,.3,1) .5s forwards; }
+  @keyframes gaugeGrow {
+    0% { width: 30.6%; background: var(--accent); }
+    70% { width: 83.3%; background: var(--warn); }
+    100% { width: 91.7%; background: var(--accent2); }
+  }
+  .g-mark { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--text-dim); }
+  .g-mark.limit { background: var(--accent2); width: 3px; }
+  .g-lab { position: absolute; white-space: nowrap; font-size: 0.86rem; color: var(--text-dim); transform: translateX(-50%); }
+  .g-lab.up { bottom: 22px; }
+  .g-lab.down { top: 22px; }
+  .g-lab.limit { color: var(--accent2); font-weight: 700; }
+  .g-lab.r { transform: translateX(-100%); }
+  .fail {
+    display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.9rem;
+    color: var(--accent2); opacity: 0;
+  }
+  .ap.on .fail { animation: fadeIn .4s ease 2.2s forwards; }
+  .fail::before { content: "\2715"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent2); color: var(--accent-ink); font-size: 0.7rem; }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .cads { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .cads-node {
+    border: 1px solid var(--card-border); background: var(--bg); border-radius: 10px;
+    padding: 8px 12px; font-weight: 700; font-size: 0.95rem; text-align: center;
+  }
+  .cads-node small { display: block; font-weight: 500; font-size: 0.7rem; color: var(--text-faint); }
+  .cads-paths { display: flex; flex-direction: column; gap: 30px; padding: 6px 0; }
+  .cpath { position: relative; height: 2px; }
+  .cpath span {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    font-size: 0.74rem; font-weight: 700; padding: 1px 8px; border-radius: 999px; white-space: nowrap;
+    background: var(--card);
+  }
+  .cpath.api { border-top: 2px dashed rgba(255,84,112,0.6); height: 0; }
+  .cpath.api span { color: var(--accent2); text-decoration: line-through; }
+  .cpath.api::after {
+    content: "\2715"; position: absolute; right: 18%; top: -11px; color: var(--accent2); font-weight: 800; font-size: 0.95rem;
+  }
+  .cpath.direct { background: var(--accent); transform-origin: left center; transform: scaleX(0); }
+  .ap.on .cpath.direct { animation: drawX .8s ease .6s forwards; }
+  .cpath.direct::after {
+    content: ""; position: absolute; right: -2px; top: -5px;
+    border-left: 8px solid var(--accent); border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+  }
+  .cpath.direct span { color: var(--accent-ink); background: var(--accent); }
+  @keyframes drawX { to { transform: scaleX(1); } }
+  .cads-time { font-size: 1rem; color: var(--text-dim); }
+  .cads-time s { color: var(--text-faint); }
+  .cads-time b { font-family: var(--font-display); color: var(--accent); font-size: 1.2rem; }
+
+  .result { display: grid; grid-template-columns: repeat(3, auto); gap: 6px 16px; align-items: baseline; margin-bottom: 12px; }
+  .result div { white-space: nowrap; font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; color: var(--accent); line-height: 1.1; }
+  .result small { display: block; font-family: var(--font-body); font-weight: 500; font-size: 0.74rem; color: var(--text-faint); margin-top: 3px; }
+  .fix-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fix-chips span { font-size: 0.76rem; font-weight: 600; border: 1px solid rgba(200,255,77,0.4); color: var(--text); padding: 3px 10px; border-radius: 999px; }
+
+  .takeaway {
+    margin-top: 28px; padding: 22px 26px; border-left: 3px solid var(--accent);
+    background: var(--card); border-radius: var(--radius-sm);
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(1.15rem, 2.2vw, 1.45rem); line-height: 1.3;
+  }
+
+  /* ---------- Migration diagram ---------- */
   .eq-callout {
     display: flex; gap: 12px; align-items: center;
     border: 1px dashed rgba(200,255,77,0.5); background: var(--accent-soft);
-    border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 26px;
-    font-weight: 600; font-size: 0.95rem;
+    border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 18px;
+    font-weight: 600; font-size: 0.98rem;
   }
   .eq-callout::before { content: "="; font-family: var(--font-display); font-weight: 700; color: var(--accent); font-size: 1.3rem; line-height: 1; }
-  .chain-step.mine { border-color: var(--accent); }
-  .chain-step.mine small { color: var(--accent); }
+  .chain { margin-bottom: 22px; }
+  .chain-step.val { border-color: var(--accent); }
+
+  .ms {
+    position: absolute; inset: 0; padding: 22px 26px;
+    opacity: 0; pointer-events: none; transition: opacity .35s ease;
+  }
+  .ms.on { opacity: 1; pointer-events: auto; }
+  .mig-counter {
+    position: absolute; top: 16px; right: 20px; z-index: 2; text-align: right;
+    font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; font-variant-numeric: tabular-nums;
+  }
+  .mig-counter s { color: var(--text-faint); font-size: 0.8em; margin-right: 6px; }
+  .mig-counter b { color: var(--accent); }
+  .mig-counter small { display: block; font-family: var(--font-body); font-size: 0.74rem; font-weight: 500; color: var(--text-faint); }
+  .ms-label { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+
+  .pair { position: absolute; left: 26px; right: 26px; top: 74px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 22px; max-width: 760px; }
+  .rec { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .rgrid { position: relative; display: grid; grid-template-columns: repeat(6, 30px); gap: 6px; }
+  .rgrid i { width: 30px; height: 30px; border-radius: 5px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.18); }
+  .ms.on .rgrid.pop i { animation: pop .35s ease backwards; animation-delay: calc(var(--k) * 18ms); }
+  @keyframes pop { from { transform: scale(0); opacity: 0; } }
+  .ms.on .rgrid.collapse i { animation: collapse .7s cubic-bezier(.5,0,.3,1) forwards; animation-delay: calc(.3s + var(--k) * 10ms); }
+  @keyframes collapse { to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; } }
+  .hashblk {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(0);
+    background: var(--accent); color: var(--accent-ink); border-radius: 10px; padding: 14px 18px; text-align: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; white-space: nowrap;
+  }
+  .hashblk small { display: block; font-size: 0.78rem; font-weight: 500; opacity: .75; }
+  .ms.on .hashblk { animation: blockIn .5s cubic-bezier(.2,1.4,.4,1) 1.1s forwards; }
+  @keyframes blockIn { to { transform: translate(-50%, -50%) scale(1); } }
+  .vs { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--text-dim); }
+  .vs b { display: block; font-size: 2rem; color: var(--text); }
+  .rec-cap { margin-top: 12px; font-weight: 600; font-size: 0.95rem; color: var(--text-dim); }
+
+  .batches { position: absolute; left: 26px; right: 26px; top: 70px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center; max-width: 820px; }
+  .bcol { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; }
+  .chips { display: flex; flex-direction: column; gap: 4px; }
+  .chips span {
+    font-size: 0.84rem; padding: 2px 8px; border-radius: 4px; background: rgba(255,255,255,0.08); color: var(--text-dim); white-space: nowrap;
+  }
+  .ms.on .chips span { animation: slideIn .35s ease backwards; animation-delay: calc(var(--k) * 70ms); }
+  @keyframes slideIn { from { transform: translateX(-12px); opacity: 0; } }
+  .chips em { font-style: normal; font-size: 0.76rem; color: var(--text-faint); padding: 2px 0; }
+  .sigma { font-family: var(--font-display); font-weight: 700; font-size: 2rem; color: var(--accent); }
+  .btotal {
+    border: 2px solid var(--accent); border-radius: 10px; padding: 10px 12px; text-align: center;
+    font-weight: 700; font-size: 0.82rem; white-space: nowrap;
+  }
+  .btotal small { display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-faint); }
+  .ms.on .sigma, .ms.on .btotal { animation: fadeUp .45s ease backwards .7s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } }
+  .match { font-family: var(--font-display); font-weight: 700; color: var(--accent); text-align: center; font-size: 1.6rem; }
+  .match small { display: block; font-family: var(--font-body); font-size: 0.72rem; color: var(--text-faint); font-weight: 600; }
+  .ms.on .match { animation: fadeUp .45s ease backwards 1.1s; }
+  .tradeoff {
+    position: absolute; left: 26px; right: 26px; bottom: 18px; max-width: 760px;
+    border-top: 1px solid var(--card-border); padding-top: 12px; font-size: 0.86rem; color: var(--text-dim);
+  }
+  .tradeoff b { color: var(--text); }
+
+  .bgrid { position: absolute; left: 26px; top: 76px; display: grid; grid-template-columns: repeat(20, 26px); gap: 5px; }
+  .bgrid i { width: 26px; height: 26px; border-radius: 4px; background: rgba(255,255,255,0.08); }
+  .ms.on .bgrid i { animation: okCell .3s ease forwards; animation-delay: calc(var(--k) * 9ms); }
+  @keyframes okCell { to { background: rgba(200,255,77,0.6); } }
+  .ms.on .bgrid i.bad { animation: badCell .3s ease forwards, pulse 1.4s ease-in-out 2s infinite; animation-delay: calc(var(--k) * 9ms), 2s; }
+  @keyframes badCell { to { background: var(--accent2); } }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 5px rgba(255,84,112,0.35); } }
+  .bgrid-key { position: absolute; left: 26px; bottom: 20px; display: flex; gap: 18px; font-size: 0.86rem; color: var(--text-dim); }
+  .bgrid-key i { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 6px; }
+
+  .drill { position: absolute; left: 26px; right: 26px; top: 64px; display: grid; grid-template-columns: 1.1fr auto 1fr; gap: 18px; align-items: start; max-width: 900px; }
+  .dpanel { border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 14px; background: var(--card); }
+  .dpanel h5 { margin: 0 0 8px; font-family: var(--font-display); font-size: 1.05rem; }
+  .dpanel.batch { border-color: var(--accent2); }
+  .dpanel.batch h5 { color: var(--accent2); }
+  .hrow { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; font-size: 0.86rem; color: var(--text-dim); padding: 3px 8px; border-radius: 4px; }
+  .hrow b { color: var(--accent); font-weight: 700; }
+  .hrow.head { color: var(--text-faint); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: 0.64rem; }
+  .ms.on .hrow.bad { animation: rowBad .4s ease forwards .8s; }
+  @keyframes rowBad { to { background: rgba(255,84,112,0.22); color: var(--text); } }
+  .hrow.bad b { color: var(--accent2); }
+  .more { font-size: 0.8rem; color: var(--text-faint); padding: 4px 6px 0; }
+  .darrow { align-self: center; font-size: 1.6rem; color: var(--accent2); }
+  .ms.on .darrow, .ms.on .dpanel.rec1 { animation: fadeUp .45s ease backwards 1.4s; }
+  .rgrid.small { grid-template-columns: repeat(6, 22px); gap: 4px; margin-bottom: 10px; }
+  .rgrid.small i { width: 22px; height: 22px; }
+  .rgrid.small i.diff { background: var(--accent2); border-color: var(--accent2); }
+  .ms.on .rgrid.small i.diff { animation: pulse 1.4s ease-in-out 2s infinite; }
+  .attr { font-size: 0.95rem; line-height: 1.6; color: var(--text-dim); }
+  .attr b { color: var(--text); }
+  .attr .ex { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--accent-ink); background: var(--text-dim); padding: 1px 6px; border-radius: 999px; margin-left: 6px; }
+  .attr .ov { color: var(--text-faint); }
+  .attr .nv { color: var(--accent2); font-weight: 700; }
 
   /* Compact RAG card */
   .proj.compact .proj-head { margin-bottom: 28px; }
@@ -437,7 +639,15 @@
   .rag-summary .pbi-label { margin-bottom: 8px; }
   .rag-summary .problem .pbi-label { color: var(--accent2); }
   .rag-summary .impact .pbi-label { color: var(--accent); }
-  .rag-summary p { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+  .rag-summary p { color: var(--text-dim); font-size: 0.92rem; margin: 0 0 8px; }
+  .rag-summary p:last-child { margin-bottom: 0; }
+
+  /* Fix it permanently */
+  .through h2 { margin-bottom: 44px; }
+  .t-grid.three { grid-template-columns: repeat(3, 1fr); }
+  .t-grid.three .t-item { padding: 28px 24px 30px; border-right: 2px solid var(--accent-ink); }
+  .t-grid.three .t-item:first-child { padding-left: 0; }
+  .t-grid.three .t-item:last-child { border-right: none; padding-right: 0; }
 
   /* Penn */
   .penn { padding: 80px 28px; border-top: 1px solid var(--card-border); }
@@ -455,29 +665,42 @@
   }
   .ta-card b { font-family: var(--font-display); color: var(--accent2); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
 
-  .through h2 { margin-bottom: 44px; }
-  .t-grid.three { grid-template-columns: repeat(3, 1fr); }
-  .t-grid.three .t-item { padding: 28px 24px 30px; border-right: 2px solid var(--accent-ink); }
-  .t-grid.three .t-item:first-child { padding-left: 0; }
-  .t-grid.three .t-item:last-child { border-right: none; padding-right: 0; }
-
   @media (max-width: 900px) {
-    .steps { grid-template-columns: 1fr; gap: 0; padding-left: 0; }
-    .steps-rail { left: 19px; right: auto; top: 20px; bottom: 20px; width: 2px; height: auto; }
-    .steps-rail span { width: 100%; height: 0; transition-property: height; background: linear-gradient(180deg, var(--text-faint), var(--accent2) 45%, var(--accent)); }
-    .steps.in .steps-rail span { height: 100%; }
-    .step { display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding-bottom: 14px; }
-    .step-card { height: auto; }
     .rag-summary, .penn-inner, .t-grid.three { grid-template-columns: 1fr; }
     .t-grid.three .t-item { padding: 24px 0; border-right: none; }
+    .dg-stage { height: auto; min-height: 560px; }
+    .gt { position: relative; left: auto; right: auto; top: auto; bottom: auto; height: 300px; margin: 18px 14px 34px; }
+    .gt-name { width: 92px; font-size: 0.8rem; }
+    .gt-track { left: 96px; }
+    .gt-axis { left: 110px; right: 14px; top: 334px; bottom: auto; }
+    .ap, .ap.narrow, .ap.res { position: relative; top: auto; right: auto; left: auto; width: auto; margin: 0 14px 14px; display: none; }
+    .ap.on { display: block; }
+    .ms { position: relative; inset: auto; display: none; padding: 18px; }
+    .ms.on { display: block; }
+    .mig-counter { position: relative; top: auto; right: auto; text-align: left; padding: 16px 18px 0; }
+    .pair, .batches, .drill, .bgrid, .tradeoff, .bgrid-key { position: relative; left: auto; right: auto; top: auto; bottom: auto; }
+    .pair, .batches, .drill { grid-template-columns: 1fr; }
+    .bgrid { grid-template-columns: repeat(16, 1fr); }
+    .bgrid i { width: auto; aspect-ratio: 1; height: auto; }
+    .bgrid-key, .tradeoff { margin-top: 14px; }
+    .bcol { grid-template-columns: 1fr; }
   }
   @media (max-width: 640px) {
     .penn { padding: 64px 20px; }
+    .dg { padding: 18px; }
+    .dg-reset { margin-left: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .step, .step-dot, .steps-rail span { transition: none !important; }
-    .step { opacity: 1; transform: none; }
-    .steps-rail span { width: 100%; }
+    .dg *, .dg *::before, .dg *::after { transition: none !important; animation: none !important; }
+    .gt.zoom { animation: none; }
+    .ap.on .gauge-fill { width: 91.7%; background: var(--accent2); }
+    .ap.on .fail { opacity: 1; }
+    .ap.on .cpath.direct { transform: none; }
+    .ms.on .rgrid.collapse i { opacity: 0; }
+    .ms.on .hashblk { transform: translate(-50%, -50%) scale(1); }
+    .ms.on .bgrid i { background: rgba(200,255,77,0.6); }
+    .ms.on .bgrid i.bad { background: var(--accent2); }
+    .ms.on .hrow.bad { background: rgba(255,84,112,0.22); color: var(--text); }
   }
 </style>
 </head>
@@ -500,7 +723,7 @@
   <div class="hero-inner">
     <div class="tesla-badge"><span class="dot"></span>Built for Tesla - Infrastructure Software</div>
     <h1>I turn production problems into <span class="hl">permanent fixes</span>.</h1>
-    <p class="hero-sub">A decade-old pipeline, a 4M+ record migration, and a team knowledge base. In each case I found the root cause, fixed it at the system level, and proved the fix with numbers.</p>
+    <p class="hero-sub">A daily pipeline that broke. A 4M+ record migration with zero tolerance for lost data. Team knowledge spread across hundreds of Confluence pages. Each time I fixed the cause, then the system around it.</p>
     <p class="prepared-for">Prepared for my conversation with <strong>Alex Boldt</strong>, Staff Software Engineer, Tesla.</p>
 
     <div class="stat-strip">
@@ -529,8 +752,8 @@
     <nav class="proj-index" aria-label="Projects on this page">
       <a href="#airflow">
         <div class="pi-num">01 &middot; PRODUCTION PIPELINE</div>
-        <div class="pi-title">Airflow Pipeline Optimization</div>
-        <div class="pi-sub">10.5h &rarr; 6.5h, ~25% lower compute cost</div>
+        <div class="pi-title">Airflow Pipeline</div>
+        <div class="pi-sub">Fixed the break, then the whole pipeline</div>
       </a>
       <a href="#migration">
         <div class="pi-num">02 &middot; DATA ACCURACY</div>
@@ -555,135 +778,111 @@
       <div class="proj-num">01</div>
       <div>
         <p class="section-kicker">Production pipeline</p>
-        <h2>Airflow Pipeline Optimization</h2>
-        <div class="proj-tags"><span>Apache Airflow</span><span>AWS EC2</span><span>Python</span></div>
+        <h2>Airflow Pipeline: Fix the Break, Then the System</h2>
+        <div class="proj-tags"><span>Apache Airflow</span><span>S3</span><span>Cross-account data sharing (CADS)</span></div>
       </div>
     </div>
 
     <div class="pbi reveal">
       <div class="pbi-card problem">
         <div class="pbi-label">Problem</div>
-        <p>A <strong>~10-year-old daily pipeline</strong> producing profitability reports ran <strong>10.5 hours</strong>, spinning EC2 instances up and down.</p>
-        <p>Jobs had been edited piecemeal for years. Nobody had looked at the compute picture as a whole.</p>
+        <p>A <strong>~10-year-old daily pipeline</strong> that produces profitability reports. It ran almost every day and took <strong>10.5 hours</strong> end to end.</p>
+        <p>One batch job pulled data through an API. It was designed for about 1.1 GB and grew to about 3 GB. At a <strong>~3.3 GB limit</strong> the pull stopped working. The job also took 25 to 35 minutes.</p>
       </div>
       <div class="pbi-card built">
-        <div class="pbi-label">What I built</div>
-        <p>I was asked to optimize one job. I treated the <strong>whole pipeline as one system</strong> instead, traced its EC2 utilization, and fixed three root causes:</p>
+        <div class="pbi-label">What I did</div>
+        <p>Two tasks: make it work again, and make it faster.</p>
         <ul>
-          <li><strong>Tighter shutdown timing</strong> so instances stop once their work is done.</li>
-          <li><strong>Right-sized instances</strong> matched to each step.</li>
-          <li><strong>Parallel execution</strong> for steps that never depended on each other.</li>
+          <li><strong>Fix the break:</strong> an API cannot move data that large, so I switched to cross-account data sharing (CADS), S3 to S3. The job went from 25 to 35 minutes to <strong>5 to 7 minutes</strong>.</li>
+          <li><strong>Then the whole pipeline:</strong> the new pull changed what the pipeline needed. I compared hours used with hours alive, then tightened shutdown timing, right-sized instances and ran independent steps in parallel.</li>
         </ul>
       </div>
       <div class="pbi-card impact">
         <div class="pbi-label">Impact</div>
         <div class="big-metric">6.5h</div>
-        <div class="big-metric-label">daily runtime, down from 10.5h</div>
+        <div class="big-metric-label">end to end, down from 10.5h</div>
         <div class="big-metric">~25%</div>
-        <div class="big-metric-label" style="margin-bottom:0">lower compute cost, ~$10K saved per month</div>
+        <div class="big-metric-label" style="margin-bottom:0">lower compute cost, about $10K saved per month</div>
       </div>
     </div>
 
-    <div class="viz steps-wrap reveal">
-      <div class="viz-head">
-        <div class="viz-title">How I found and fixed it</div>
-        <div class="viz-note">From one job to the whole pipeline</div>
-      </div>
-      <div class="steps" id="steps">
-        <div class="steps-rail" aria-hidden="true"><span></span></div>
-        <div class="step" style="--i:0">
-          <div class="step-dot">A</div>
-          <div class="step-card">
-            <div class="step-kicker">The ask</div>
-            <h4>Optimize one job</h4>
-            <p>I was asked to optimize one job in a ~10-year-old daily pipeline.</p>
-          </div>
+    <div class="viz dg reveal" id="airDg" tabindex="0" aria-roledescription="step-by-step diagram" aria-label="Airflow pipeline, 5 steps">
+      <div class="dg-top">
+        <div>
+          <div class="dg-num">Step 1 of 5</div>
+          <div class="dg-title">How it ran for years</div>
         </div>
-        <div class="step" style="--i:1">
-          <div class="step-dot">B</div>
-          <div class="step-card">
-            <div class="step-kicker">Zoom out</div>
-            <h4>Look at the whole pipeline</h4>
-            <p>I stepped back and looked at the whole pipeline instead of the single job.</p>
-          </div>
-        </div>
-        <div class="step cause" style="--i:2">
-          <div class="step-dot">C</div>
-          <div class="step-card">
-            <div class="step-kicker">Root causes</div>
-            <h4>Dug into EC2 utilization</h4>
-            <ol>
-              <li>Instances staying alive after their work finished</li>
-              <li>Instances oversized for their steps</li>
-              <li>Independent steps running in series</li>
-            </ol>
-          </div>
-        </div>
-        <div class="step fix" style="--i:3">
-          <div class="step-dot">D</div>
-          <div class="step-card">
-            <div class="step-kicker">Fixes</div>
-            <h4>Fixed each one</h4>
-            <ol>
-              <li>Tighter shutdown timing</li>
-              <li>Right-sized instances</li>
-              <li>Parallel execution</li>
-            </ol>
-          </div>
-        </div>
-        <div class="step verify" style="--i:4">
-          <div class="step-dot">E</div>
-          <div class="step-card">
-            <div class="step-kicker">Confirmed</div>
-            <h4>Before / after numbers</h4>
-            <ol>
-              <li>10.5h &rarr; 6.5h runtime</li>
-              <li>~25% lower compute cost</li>
-              <li>~$10K/month saved</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-      <p class="steps-note">Each fix in D answers the root cause with the same number in C.</p>
-    </div>
-
-    <div class="viz reveal">
-      <div class="viz-head">
-        <div class="viz-title">Daily pipeline runtime, before and after</div>
-        <div class="viz-note">Hours, end to end</div>
+        <div class="dg-note">Illustrative pipeline, job names simplified.</div>
       </div>
 
-      <div class="rt-chart" id="rtChart">
-        <div class="rt-grid" aria-hidden="true">
-          <div style="left:0%"></div><div style="left:16.667%"></div><div style="left:33.333%"></div><div style="left:50%"></div><div style="left:66.667%"></div><div style="left:83.333%"></div><div style="left:100%"></div>
+      <div class="dg-stage" id="airStage" data-step="1">
+        <div class="gt" id="gt"></div>
+        <div class="gt-axis" id="gtAxis" aria-hidden="true"></div>
+
+        <div class="ap narrow" data-s="1">
+          <div class="ap-title">Jobs in series, one instance each</div>
+          <div class="ap-legend">
+            <span><i style="background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.3)"></i>Job running</span>
+            <span><i style="background:#3c3c46"></i>Instance alive</span>
+          </div>
         </div>
-        <div class="rt-row">
-          <div class="rt-label">Before<small>piecemeal</small></div>
-          <div class="rt-bar before" data-w="87.5" data-tip="Before: 10.5 h end to end"></div>
-          <div class="rt-val" style="left:87.5%">10.5 h</div>
+
+        <div class="ap" data-s="2">
+          <div class="ap-title">Data pull: size vs API limit</div>
+          <div class="gauge">
+            <div class="gauge-fill"></div>
+            <div class="g-mark" style="left:30.6%"></div>
+            <div class="g-mark" style="left:83.3%"></div>
+            <div class="g-mark limit" style="left:91.7%"></div>
+            <span class="g-lab up" style="left:30.6%">~1.1 GB designed for</span>
+            <span class="g-lab down r" style="left:83.3%">grew to ~3 GB</span>
+            <span class="g-lab up limit r" style="left:93%">~3.3 GB limit</span>
+          </div>
+          <div class="fail">API pull failed</div>
         </div>
-        <div class="rt-row">
-          <div class="rt-label">After<small>one system</small></div>
-          <div class="rt-bar after" data-w="54.167" data-tip="After: 6.5 h with shutdown timing, right-sizing and parallel execution"></div>
-          <div class="rt-saved" style="left:54.167%; width:33.333%" data-tip="Time recovered every day"></div>
-          <div class="rt-val" style="left:87.5%">6.5 h</div>
+
+        <div class="ap" data-s="3">
+          <div class="ap-title">Fix 1: cross-account data sharing</div>
+          <div class="cads">
+            <div class="cads-node">S3<small>source account</small></div>
+            <div class="cads-paths">
+              <div class="cpath api"><span>API pull</span></div>
+              <div class="cpath direct"><span>CADS: S3 to S3</span></div>
+            </div>
+            <div class="cads-node">S3<small>our account</small></div>
+          </div>
+          <div class="cads-time">Data pull job: <s>25 to 35 min</s> &rarr; <b>5 to 7 min</b></div>
         </div>
-        <div class="rt-axis" aria-hidden="true">
-          <span style="left:0%">0</span><span style="left:16.667%">2h</span><span style="left:33.333%">4h</span><span style="left:50%">6h</span><span style="left:66.667%">8h</span><span style="left:83.333%">10h</span><span style="left:100%">12h</span>
+
+        <div class="ap narrow" data-s="4">
+          <div class="ap-title">Hours used vs hours alive</div>
+          <div class="ap-legend">
+            <span><i style="background:#8a8a93"></i>Used (working)</span>
+            <span><i style="background:repeating-linear-gradient(135deg, rgba(255,84,112,0.85) 0 4px, rgba(255,84,112,0.25) 4px 8px)"></i>Alive but idle</span>
+          </div>
+        </div>
+
+        <div class="ap res" data-s="5">
+          <div class="result">
+            <div>10.5h &rarr; 6.5h<small>end to end</small></div>
+            <div>~25%<small>lower compute cost</small></div>
+            <div>~$10K<small>saved per month</small></div>
+          </div>
+          <div class="fix-chips"><span>Tighter shutdown</span><span>Oversized &rarr; right-sized</span><span>Parallel lanes</span></div>
         </div>
       </div>
-      <div class="rt-legend">
-        <span><i style="background:var(--accent2)"></i>Before</span>
-        <span><i style="background:var(--accent)"></i>After</span>
-        <span><i style="background:repeating-linear-gradient(135deg, rgba(200,255,77,0.5) 0 3px, transparent 3px 6px); border:1px dashed var(--accent)"></i>Time recovered</span>
+
+      <p class="dg-cap" aria-live="polite"></p>
+      <div class="dg-ctrl">
+        <button type="button" class="btn btn-ghost dg-back">&larr; Back</button>
+        <div class="dg-dots" role="group" aria-label="Go to step"></div>
+        <button type="button" class="btn btn-primary dg-next">Next &rarr;</button>
+        <span class="dg-keys">or <kbd>&larr;</kbd> <kbd>&rarr;</kbd></span>
+        <button type="button" class="btn btn-ghost dg-reset">Reset</button>
       </div>
-      <table class="sr-only">
-        <caption>Daily pipeline runtime in hours</caption>
-        <tr><th>Stage</th><th>Runtime (hours)</th></tr>
-        <tr><td>Before</td><td>10.5</td></tr>
-        <tr><td>After</td><td>6.5</td></tr>
-      </table>
     </div>
+
+    <div class="takeaway reveal">Fix the break first, then look at the whole system. The biggest win was not in the job I was asked about.</div>
   </div>
 </section>
 
@@ -695,85 +894,143 @@
       <div>
         <p class="section-kicker" style="color:var(--accent2)">Data accuracy at scale</p>
         <h2>4M Cost-Center Migration</h2>
-        <div class="proj-tags"><span>SHA-2 hashing</span><span>Python</span><span>Apache Airflow</span><span>Databricks</span></div>
+        <div class="proj-tags"><span>Apache Airflow</span><span>Python rule engine</span><span>Databricks</span><span>SHA-2 hashing</span></div>
       </div>
     </div>
 
     <div class="pbi reveal">
       <div class="pbi-card problem">
         <div class="pbi-label">Problem</div>
-        <p>When JPMorgan's Corporate Banking merged into CIB, <strong>4M+ cost centers</strong> had to migrate, each with <strong>30 attributes</strong>, with zero tolerance for data loss or duplication.</p>
-        <p>The migration ran as Airflow-orchestrated batches with a Python rule engine, processed on Databricks. Comparing every field naively meant 120M checks.</p>
+        <p>Commercial Banking (CB) merged into Corporate and Investment Banking (CIB). About <strong>4 million cost centers</strong>, each with about <strong>30 attributes</strong>, had to migrate.</p>
+        <p>Zero tolerance for data loss or duplication: one wrong cost center can cause a chain reaction. Checking every attribute is about <strong>120 million comparisons</strong>. Too slow, and it wastes compute across environments.</p>
       </div>
       <div class="pbi-card built">
         <div class="pbi-label">What I built</div>
-        <p>I <strong>designed and implemented the validation layer</strong>: a two-tier hash comparison.</p>
+        <p>I designed the migration system: Airflow-orchestrated batches, a 7-layer Python rule engine, Databricks for batch processing, then my validation layer. <strong>The validation layer is the part I am proudest of.</strong></p>
         <ul>
-          <li><strong>Tier 1:</strong> one SHA-2 hash per record turns 30 attribute checks into a single value per record.</li>
-          <li><strong>Tier 2:</strong> hashes summed across batches of ~25,000 records. Only a batch whose sums disagree gets opened record by record.</li>
+          <li><strong>Level 1:</strong> one SHA-2 hash per record. 30 checks become 1.</li>
+          <li><strong>Level 2:</strong> sum record hashes in batches of about 25,000, old and new, and compare totals.</li>
+          <li><strong>Level 3:</strong> only for a batch that does not match, compare its record hashes, then open the one differing record.</li>
         </ul>
       </div>
       <div class="pbi-card impact">
         <div class="pbi-label">Impact</div>
-        <div class="big-metric">Zero</div>
-        <div class="big-metric-label">records lost or duplicated</div>
         <div class="big-metric">120M &rarr; ~160</div>
-        <div class="big-metric-label" style="margin-bottom:0">comparisons reduced to batch checks</div>
+        <div class="big-metric-label">comparisons reduced to batch checks</div>
+        <p><strong>Zero tolerance for lost or duplicated records, by design.</strong></p>
       </div>
     </div>
 
-    <div class="viz reveal">
-      <div class="viz-head">
-        <div class="viz-title">Two-tier hash validation</div>
-        <div class="viz-note">Click a tier &middot; bar widths on a log scale</div>
-      </div>
-
+    <div class="viz dg reveal" id="migDg" tabindex="0" aria-roledescription="step-by-step diagram" aria-label="Hash validation, 5 steps">
       <div class="eq-callout">Same problem as inventory accuracy: prove two systems agree, at scale, without comparing every field.</div>
 
       <div class="chain" aria-label="Migration pipeline">
-        <div class="chain-step">Airflow<small>orchestrates batches</small></div>
+        <div class="chain-step">Airflow<small>orchestrated batches</small></div>
         <span class="chain-arrow">&rarr;</span>
-        <div class="chain-step">Python rule engine<small>business rules</small></div>
+        <div class="chain-step">Python rule engine<small>7 layers</small></div>
         <span class="chain-arrow">&rarr;</span>
         <div class="chain-step">Databricks<small>batch processing</small></div>
         <span class="chain-arrow">&rarr;</span>
-        <div class="chain-step mine">Validation layer<small>my part: two-tier hash check</small></div>
+        <div class="chain-step val">Validation layer<small>two-level hash check, drill-down</small></div>
       </div>
 
-      <div class="funnel-wrap">
+      <div class="dg-top">
         <div>
-          <div class="funnel" id="funnel" role="tablist" aria-label="Validation tiers"></div>
-          <div class="f-hint">Use the tiers to step through the reduction</div>
+          <div class="dg-num">Step 1 of 5</div>
+          <div class="dg-title">One record, 30 checks</div>
         </div>
-        <div class="f-detail" id="fDetail" aria-live="polite"></div>
+        <div class="dg-note">Hash values and attribute names are placeholders.</div>
       </div>
 
-      <div class="sim">
-        <div class="viz-head" style="margin-bottom:16px">
-          <div class="viz-title">Try it: validate a migration run</div>
-          <div class="viz-note">Simulation &middot; ~160 batches of ~25,000 records</div>
-        </div>
-        <div class="sim-controls">
-          <div class="seg" id="simMode" role="group" aria-label="Fault to inject">
-            <button type="button" data-mode="none" aria-pressed="true">Clean run</button>
-            <button type="button" data-mode="lost" aria-pressed="false">Lose a record</button>
-            <button type="button" data-mode="dup" aria-pressed="false">Duplicate a record</button>
-            <button type="button" data-mode="altered" aria-pressed="false">Alter an attribute</button>
-          </div>
-          <button type="button" class="btn btn-primary sim-run" id="simRun">Run validation &rarr;</button>
-        </div>
-        <div class="sim-body">
-          <div>
-            <div class="batch-grid" id="batchGrid" aria-hidden="true"></div>
-            <div class="batch-caption">Each cell is one batch. A cell lights up when its source and target hash sums are compared.</div>
-          </div>
-          <div class="sim-readout">
-            <div class="sr-row"><span>Batch sums compared</span><b id="srBatches">0</b></div>
-            <div class="sr-row"><span>Record hashes inspected</span><b id="srRecords">0</b></div>
-            <div class="sr-row"><span>Naive field-by-field</span><b>120,000,000</b></div>
-            <div class="sim-msg" id="simMsg">Pick a fault (or none) and run it.</div>
+      <div class="dg-stage" id="migStage" data-step="1">
+        <div class="mig-counter" id="migCounter"></div>
+
+        <!-- 1 -->
+        <div class="ms" data-s="1">
+          <div class="ms-label">Comparing one cost center, old vs new</div>
+          <div class="pair">
+            <div class="rec"><div class="rgrid pop" data-cells="30"></div><div class="rec-cap">Old dataset</div></div>
+            <div class="vs"><b>30</b>checks</div>
+            <div class="rec"><div class="rgrid pop" data-cells="30"></div><div class="rec-cap">New dataset</div></div>
           </div>
         </div>
+
+        <!-- 2 -->
+        <div class="ms" data-s="2">
+          <div class="ms-label">Level 1: hash all 30 attributes into one value</div>
+          <div class="pair">
+            <div class="rec"><div class="rgrid collapse" data-cells="30"><div class="hashblk">SHA-2 hash<small class="mono">3f9a&hellip;c21e</small></div></div><div class="rec-cap">Old dataset</div></div>
+            <div class="vs"><b>1</b>check</div>
+            <div class="rec"><div class="rgrid collapse" data-cells="30"><div class="hashblk">SHA-2 hash<small class="mono">3f9a&hellip;c21e</small></div></div><div class="rec-cap">New dataset</div></div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="ms" data-s="3">
+          <div class="ms-label">Level 2: one total per batch of ~25,000 record hashes</div>
+          <div class="batches">
+            <div class="bcol">
+              <div class="chips mono">
+                <span style="--k:0">3f9a&hellip;c21e</span><span style="--k:1">a710&hellip;9b04</span><span style="--k:2">0c5e&hellip;77fa</span><span style="--k:3">e21b&hellip;4d90</span><span style="--k:4">91d3&hellip;0e6c</span>
+                <em>+ ~25,000 more</em>
+              </div>
+              <div class="sigma">&Sigma;</div>
+              <div class="btotal"><small>Old batch total</small><span class="mono">8e1f&hellip;44d0</span></div>
+            </div>
+            <div class="match">=<small>compare</small></div>
+            <div class="bcol">
+              <div class="chips mono">
+                <span style="--k:0">3f9a&hellip;c21e</span><span style="--k:1">a710&hellip;9b04</span><span style="--k:2">0c5e&hellip;77fa</span><span style="--k:3">e21b&hellip;4d90</span><span style="--k:4">91d3&hellip;0e6c</span>
+                <em>+ ~25,000 more</em>
+              </div>
+              <div class="sigma">&Sigma;</div>
+              <div class="btotal"><small>New batch total</small><span class="mono">8e1f&hellip;44d0</span></div>
+            </div>
+          </div>
+          <div class="tradeoff"><b>Batch size trade-off:</b> too small a batch barely reduces the checks. Too large, and a failure leaves a lot to re-check. About 25,000 balances the two.</div>
+        </div>
+
+        <!-- 4 -->
+        <div class="ms" data-s="4">
+          <div class="ms-label">Old vs new batch totals, about 160 batches</div>
+          <div class="bgrid" id="bgrid"></div>
+          <div class="bgrid-key">
+            <span><i style="background:rgba(200,255,77,0.6)"></i>Totals match</span>
+            <span><i style="background:var(--accent2)"></i>Totals differ</span>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="ms" data-s="5">
+          <div class="ms-label">Level 3: open only the failed batch</div>
+          <div class="drill">
+            <div class="dpanel batch">
+              <h5>Failed batch: record hashes</h5>
+              <div class="hrow head"><span>Old</span><span></span><span>New</span></div>
+              <div class="hrow mono"><span>3f9a&hellip;c21e</span><b>=</b><span>3f9a&hellip;c21e</span></div>
+              <div class="hrow mono"><span>a710&hellip;9b04</span><b>=</b><span>a710&hellip;9b04</span></div>
+              <div class="hrow mono"><span>0c5e&hellip;77fa</span><b>=</b><span>0c5e&hellip;77fa</span></div>
+              <div class="hrow mono bad"><span>e21b&hellip;4d90</span><b>&ne;</b><span>6b0c&hellip;f31a</span></div>
+              <div class="hrow mono"><span>91d3&hellip;0e6c</span><b>=</b><span>91d3&hellip;0e6c</span></div>
+              <div class="more">+ the rest of the batch, compared the same way</div>
+            </div>
+            <div class="darrow">&rarr;</div>
+            <div class="dpanel rec1">
+              <h5>The differing record</h5>
+              <div class="rgrid small" data-cells="30" data-diff="13"></div>
+              <div class="attr"><b>region_code</b><span class="ex">example</span><br><span class="ov">old: R-104</span> &nbsp; <span class="nv">new: R-140</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="dg-cap" aria-live="polite"></p>
+      <div class="dg-ctrl">
+        <button type="button" class="btn btn-ghost dg-back">&larr; Back</button>
+        <div class="dg-dots" role="group" aria-label="Go to step"></div>
+        <button type="button" class="btn btn-primary dg-next">Next &rarr;</button>
+        <span class="dg-keys">or <kbd>&larr;</kbd> <kbd>&rarr;</kbd></span>
+        <button type="button" class="btn btn-ghost dg-reset">Reset</button>
       </div>
     </div>
   </div>
@@ -795,43 +1052,46 @@
       <div class="rag-summary">
         <div class="problem">
           <div class="pbi-label">Problem</div>
-          <p>Onboarding took months: team knowledge was scattered across hundreds of Confluence pages.</p>
+          <p>My team ran profitability reports. The knowledge was team-specific and spread across hundreds of Confluence pages.</p>
+          <p>Onboarding took about 2.5 to 3 months because new joiners kept asking the same people the same questions. I had felt this myself.</p>
         </div>
         <div class="built">
           <div class="pbi-label">What I built</div>
-          <p>Pulled pages via the Confluence API, chunked and embedded them into OpenSearch, and generated answers with internally hosted Azure OpenAI.</p>
+          <p>A RAG chatbot: "ChatGPT for our Confluence pages."</p>
+          <p>Pages are chunked in memory, since the text volume was small and no staging store was needed. Vectors, chunk text and source links go straight into OpenSearch.</p>
         </div>
         <div class="impact">
           <div class="pbi-label">Impact</div>
-          <p>Natural-language questions surface the relevant passages instantly, instead of new joiners asking the same people the same questions.</p>
+          <p>Built about a year ago and still in use.</p>
+          <p>New joiners ask the bot and get answers with links to the source pages, instead of asking the same people again.</p>
         </div>
       </div>
 
       <div class="lane ingest">
-        <div class="lane-label">Ingest <span>offline &middot; keeps the index current</span></div>
+        <div class="lane-label">Ingest <span>offline</span></div>
         <div class="lane-track">
           <div class="fnode" style="--d:0"><div class="fnode-kicker">Source</div><div class="fnode-title">Confluence API</div><div class="fnode-sub">Pull pages</div></div>
           <div class="flink"><span class="pkt" style="--d:0"></span></div>
-          <div class="fnode" style="--d:1"><div class="fnode-kicker">Transform</div><div class="fnode-title">Chunker</div><div class="fnode-sub">Pages &rarr; passages</div></div>
+          <div class="fnode" style="--d:1"><div class="fnode-kicker">Transform</div><div class="fnode-title">Chunk in memory</div><div class="fnode-sub">No staging store</div></div>
           <div class="flink"><span class="pkt" style="--d:1"></span></div>
-          <div class="fnode" style="--d:2"><div class="fnode-kicker">Model</div><div class="fnode-title">Embedding</div><div class="fnode-sub">Passage &rarr; vector</div></div>
+          <div class="fnode" style="--d:2"><div class="fnode-kicker">Model</div><div class="fnode-title">Embed chunks</div><div class="fnode-sub">Chunk &rarr; vector</div></div>
           <div class="flink"><span class="pkt" style="--d:2"></span></div>
-          <div class="fnode store" style="--d:3"><span class="shared">Shared</span><div class="fnode-kicker">Store</div><div class="fnode-title">OpenSearch</div><div class="fnode-sub">Vector index</div></div>
+          <div class="fnode store" style="--d:3"><span class="shared">Shared</span><div class="fnode-kicker">Store</div><div class="fnode-title">OpenSearch</div><div class="fnode-sub">Vectors, chunk text, source links</div></div>
         </div>
       </div>
 
       <div class="lane query">
-        <div class="lane-label">Query <span>online &middot; per question</span></div>
+        <div class="lane-label">Query <span>online, per question</span></div>
         <div class="lane-track">
           <div class="fnode" style="--d:0"><div class="fnode-kicker">Input</div><div class="fnode-title">Question</div><div class="fnode-sub">Natural language</div></div>
           <div class="flink"><span class="pkt" style="--d:0"></span></div>
-          <div class="fnode" style="--d:1"><div class="fnode-kicker">Model</div><div class="fnode-title">Embed query</div><div class="fnode-sub">Same embedding space</div></div>
+          <div class="fnode" style="--d:1"><div class="fnode-kicker">Model</div><div class="fnode-title">Embed question</div><div class="fnode-sub">Same model</div></div>
           <div class="flink"><span class="pkt" style="--d:1"></span></div>
-          <div class="fnode store" style="--d:2"><span class="shared">Shared</span><div class="fnode-kicker">Retrieve</div><div class="fnode-title">OpenSearch</div><div class="fnode-sub">Nearest passages</div></div>
+          <div class="fnode store" style="--d:2"><span class="shared">Shared</span><div class="fnode-kicker">Retrieve</div><div class="fnode-title">OpenSearch</div><div class="fnode-sub">k nearest chunks</div></div>
           <div class="flink"><span class="pkt" style="--d:2"></span></div>
           <div class="fnode" style="--d:3"><div class="fnode-kicker">Generate</div><div class="fnode-title">Azure OpenAI</div><div class="fnode-sub">Internally hosted</div></div>
           <div class="flink"><span class="pkt" style="--d:3"></span></div>
-          <div class="fnode" style="--d:4"><div class="fnode-kicker">Output</div><div class="fnode-title">Answer + passages</div><div class="fnode-sub">Grounded in the docs</div></div>
+          <div class="fnode" style="--d:4"><div class="fnode-kicker">Output</div><div class="fnode-title">Answer</div><div class="fnode-sub">With links to source pages</div></div>
         </div>
       </div>
     </div>
@@ -846,13 +1106,13 @@
     <div class="t-grid three">
       <div class="t-item">
         <div class="t-n">01 &middot; Airflow</div>
-        <h3>Fixed the whole pipeline, not one job.</h3>
-        <p>Asked to optimize a single job, I fixed the root causes across the whole pipeline instead.</p>
+        <h3>Fixed the break first, then the whole pipeline.</h3>
+        <p>File size stopped being a constraint for the data pull, and the pipeline runs in 6.5 hours instead of 10.5.</p>
       </div>
       <div class="t-item">
         <div class="t-n">02 &middot; Migration</div>
         <h3>Validated every batch.</h3>
-        <p>Every batch was checked by hash, so no lost, duplicated or altered record could pass unnoticed.</p>
+        <p>The validation was built so a lost, duplicated or altered record would break a batch match and get caught.</p>
       </div>
       <div class="t-item">
         <div class="t-n">03 &middot; RAG bot</div>
@@ -874,7 +1134,7 @@
     <div>
       <div class="penn-label">Fall 2026 coursework</div>
       <div class="skills-row">
-        <span class="pill">Applied Machine Learning</span>
+        <span class="pill">Machine Learning</span>
         <span class="pill">Artificial Intelligence</span>
         <span class="pill">Database and Information Systems</span>
       </div>
@@ -893,166 +1153,200 @@
 <script>
 (function () {
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fmt = function (n) { return n.toLocaleString('en-US'); };
 
-  /* ---- Reveal on scroll, runtime bars, step flow ---- */
-  var rt = document.getElementById('rtChart');
-  var steps = document.getElementById('steps');
-  function growBars() {
-    rt.classList.add('in');
-    rt.querySelectorAll('.rt-bar').forEach(function (b) { b.style.width = b.dataset.w + '%'; });
-  }
+  /* ---- Reveal on scroll ---- */
   if ('IntersectionObserver' in window && !reduced) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        if (e.target === rt) growBars(); else e.target.classList.add('in');
-        io.unobserve(e.target);
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
-    io.observe(rt);
-    io.observe(steps);
   } else {
     document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
-    steps.classList.add('in');
-    growBars();
   }
 
-  /* ---- Tooltip ---- */
-  var tip = document.createElement('div');
-  tip.className = 'tip';
-  tip.setAttribute('role', 'tooltip');
-  document.body.appendChild(tip);
-  document.querySelectorAll('[data-tip]').forEach(function (el) {
-    el.addEventListener('mousemove', function (ev) {
-      tip.textContent = el.dataset.tip;
-      tip.style.left = Math.min(ev.clientX + 14, window.innerWidth - tip.offsetWidth - 10) + 'px';
-      tip.style.top = (ev.clientY + 16) + 'px';
-      tip.classList.add('show');
+  /* ---- Shared click-through component ---- */
+  var steppers = [];
+  function Stepper(root, steps, onChange) {
+    var cur = 0, n = steps.length;
+    var numEl = root.querySelector('.dg-num'), titleEl = root.querySelector('.dg-title'),
+        capEl = root.querySelector('.dg-cap'), back = root.querySelector('.dg-back'),
+        next = root.querySelector('.dg-next'), reset = root.querySelector('.dg-reset'),
+        dotsEl = root.querySelector('.dg-dots');
+    var dots = steps.map(function (s, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Step ' + (i + 1) + ': ' + s.title);
+      b.addEventListener('click', function () { go(i); });
+      dotsEl.appendChild(b);
+      return b;
     });
-    el.addEventListener('mouseleave', function () { tip.classList.remove('show'); });
-  });
-
-  /* ---- Hash validation funnel ---- */
-  var NAIVE = 120000000;
-  var stages = [
-    { name: 'Naive: every field', count: NAIVE, label: '120,000,000', unit: 'comparisons (4M records × 30 attributes)',
-      kicker: 'Starting point',
-      body: ['Compare all 30 attributes of every record between source and target, one by one.',
-             'Correct, but far too slow and expensive to run on every migration batch.'] },
-    { name: 'Tier 1: hash per record', count: 4000000, label: '~4,000,000', unit: 'comparisons (one digest per record)',
-      kicker: 'Tier 1',
-      body: ['Hash all 30 attributes of a record into a single SHA-2 digest on each side.',
-             'If any attribute differs, the digest differs, so one comparison stands in for thirty.'] },
-    { name: 'Tier 2: batch sums', count: 160, label: '~160', unit: 'batch checks (~25,000 records per batch)',
-      kicker: 'Tier 2',
-      body: ['Sum the record hashes across each batch of ~25,000 records and compare the totals.',
-             'A lost record removes a hash from the sum, a duplicate adds an extra one, and an altered record changes one. Any of them breaks the match.'] },
-    { name: 'Drill-down: bad batch', count: 25000, label: '~25,000', unit: 'record hashes, only for a mismatching batch',
-      kicker: 'Only when needed', final: true,
-      body: ['Matching batches are proven clean and never opened.',
-             'A mismatching batch is inspected record by record using the Tier-1 hashes, which pinpoints the exact record to fix.'] }
-  ];
-  var funnel = document.getElementById('funnel');
-  var detail = document.getElementById('fDetail');
-  var maxLog = Math.log10(NAIVE);
-  var btns = stages.map(function (s, i) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'f-stage' + (s.final ? ' final' : '');
-    b.setAttribute('role', 'tab');
-    var pct = 40 + 60 * Math.log10(s.count) / maxLog;
-    b.innerHTML = '<div class="f-bar" style="width:' + pct.toFixed(1) + '%"><span class="f-name">' + s.name +
-                  '</span><span class="f-count">' + s.label + '</span></div>';
-    b.addEventListener('click', function () { select(i); });
-    b.addEventListener('keydown', function (ev) {
-      if (ev.key === 'ArrowDown' || ev.key === 'ArrowRight') { ev.preventDefault(); select(Math.min(i + 1, stages.length - 1), true); }
-      if (ev.key === 'ArrowUp' || ev.key === 'ArrowLeft') { ev.preventDefault(); select(Math.max(i - 1, 0), true); }
-    });
-    funnel.appendChild(b);
-    return b;
-  });
-  function select(i, focus) {
-    var s = stages[i];
-    btns.forEach(function (b, j) {
-      b.classList.toggle('active', j === i);
-      b.setAttribute('aria-selected', j === i ? 'true' : 'false');
-      b.tabIndex = j === i ? 0 : -1;
-    });
-    if (focus) btns[i].focus();
-    var color = s.final ? 'var(--accent)' : 'var(--accent2)';
-    detail.style.borderLeftColor = color;
-    detail.innerHTML = '<div class="fd-kicker" style="color:' + color + '">' + s.kicker + '</div>' +
-      '<div class="fd-num">' + s.label + '</div><div class="fd-unit">' + s.unit + '</div>' +
-      s.body.map(function (t) { return '<p>' + t + '</p>'; }).join('');
-  }
-  select(2);
-
-  /* ---- Batch validation simulation ---- */
-  var BATCHES = 160, PER = 25000;
-  var grid = document.getElementById('batchGrid');
-  var cells = [];
-  for (var c = 0; c < BATCHES; c++) { var d = document.createElement('div'); grid.appendChild(d); cells.push(d); }
-  var mode = 'none';
-  var modeBtns = document.querySelectorAll('#simMode button');
-  modeBtns.forEach(function (b) {
-    b.addEventListener('click', function () {
-      mode = b.dataset.mode;
-      modeBtns.forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
-    });
-  });
-  var runBtn = document.getElementById('simRun');
-  var elB = document.getElementById('srBatches'), elR = document.getElementById('srRecords'),
-      msg = document.getElementById('simMsg');
-
-  function setCounts(b, r) {
-    elB.textContent = fmt(b);
-    elR.textContent = fmt(r);
-  }
-
-  runBtn.addEventListener('click', function () {
-    runBtn.disabled = true;
-    cells.forEach(function (x) { x.className = ''; });
-    setCounts(0, 0);
-    msg.className = 'sim-msg';
-    msg.textContent = 'Comparing batch hash sums…';
-    var bad = mode === 'none' ? -1 : Math.floor(Math.random() * BATCHES);
-    var i = 0;
-    var step = reduced ? BATCHES : 4;
-    var timer = setInterval(function () {
-      for (var k = 0; k < step && i < BATCHES; k++, i++) {
-        cells[i].className = i === bad ? 'bad' : 'ok';
-      }
-      setCounts(i, 0);
-      if (i >= BATCHES) { clearInterval(timer); finish(bad); }
-    }, 45);
-  });
-
-  function finish(bad) {
-    if (bad < 0) {
-      msg.className = 'sim-msg good';
-      msg.textContent = 'Every batch sum matches. Every record is proven present exactly once and unchanged, without opening a single batch.';
-      runBtn.disabled = false;
-      return;
+    function go(i) {
+      cur = Math.max(0, Math.min(n - 1, i));
+      numEl.textContent = 'Step ' + (cur + 1) + ' of ' + n;
+      titleEl.textContent = steps[cur].title;
+      capEl.textContent = steps[cur].caption;
+      dots.forEach(function (d, j) {
+        if (j === cur) d.setAttribute('aria-current', 'step'); else d.removeAttribute('aria-current');
+        d.classList.toggle('done', j < cur);
+      });
+      back.disabled = cur === 0;
+      next.disabled = cur === n - 1;
+      onChange(cur);
     }
-    msg.className = 'sim-msg bad';
-    msg.textContent = 'One batch’s sums disagree. Opening only that batch…';
-    var start = performance.now(), dur = reduced ? 0 : 1100;
-    (function tick(now) {
-      var p = dur ? Math.min(1, (now - start) / dur) : 1;
-      setCounts(BATCHES, Math.round(PER * p));
-      if (p < 1) { requestAnimationFrame(tick); return; }
-      var what = {
-        lost: 'One record is missing from the target: its hash is absent from the batch sum. Found and re-migrated.',
-        dup: 'One record appears twice in the target: its hash is counted twice in the batch sum. Found and removed.',
-        altered: 'One record has a different SHA-2 digest: an attribute drifted. Found and corrected.'
-      }[mode];
-      msg.className = 'sim-msg bad';
-      msg.textContent = what + ' Every other batch was never opened.';
-      runBtn.disabled = false;
-    })(start);
+    back.addEventListener('click', function () { go(cur - 1); });
+    next.addEventListener('click', function () { go(cur + 1); });
+    reset.addEventListener('click', function () { go(0); });
+    var api = { root: root, step: function (d) { go(cur + d); } };
+    steppers.push(api);
+    go(0);
+    return api;
   }
+
+  // Arrow keys drive the diagram that has focus, or else the one most visible on screen.
+  function visibleStepper() {
+    var best = null, bestVis = 0, vh = window.innerHeight;
+    steppers.forEach(function (s) {
+      if (s.root.contains(document.activeElement)) { best = s; bestVis = Infinity; return; }
+      var r = s.root.getBoundingClientRect();
+      var vis = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+      if (vis > bestVis && vis > Math.min(220, r.height * 0.4)) { best = s; bestVis = vis; }
+    });
+    return best;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var s = visibleStepper();
+    if (!s) return;
+    e.preventDefault();
+    s.step(e.key === 'ArrowRight' ? 1 : -1);
+  });
+
+  // Restart CSS entry animations on the active scene.
+  function activate(nodes, step) {
+    nodes.forEach(function (el) { el.classList.remove('on'); });
+    nodes.forEach(function (el) {
+      if (+el.dataset.s === step) { void el.offsetWidth; el.classList.add('on'); }
+    });
+  }
+
+  /* ---- Airflow pipeline diagram ---- */
+  var H = 12; // hours shown on the track
+  var names = ['Prep', 'Data pull', 'Enrich', 'Allocate', 'Summarize', 'Report'];
+  var dur = { a: [0.9, 0.5, 2.5, 2.0, 1.6, 3.0], b: [0.9, 0.1, 2.5, 2.0, 1.6, 3.0] };
+  var start = {
+    serial:   [0, 0.9, 1.4, 3.9, 5.9, 7.5],
+    cads:     [0, 0.9, 1.0, 3.5, 5.5, 7.1],
+    parallel: [0, 0.9, 1.0, 1.0, 1.0, 3.5]
+  };
+  var idle = [0.6, 0.5, 0.8, 0.9, 0.7, 0.6];
+  var gt = document.getElementById('gt');
+  var airStage = document.getElementById('airStage');
+  var axis = document.getElementById('gtAxis');
+  [0, 2, 4, 6, 8, 10, 12].forEach(function (h) {
+    var s = document.createElement('span');
+    s.style.left = (h / H * 100) + '%';
+    s.textContent = h + 'h';
+    axis.appendChild(s);
+  });
+  var rows = names.map(function (name, i) {
+    var row = document.createElement('div');
+    row.className = 'gt-row' + (i === 1 ? ' pull' : '');
+    row.style.top = (i * 50) + 'px';
+    row.innerHTML = '<div class="gt-name">' + name + (i >= 2 && i <= 4 ? '<span class="par">parallel</span>' : '') + '</div>' +
+      '<div class="gt-track"><div class="inst-used"></div><div class="inst-idle"></div><div class="job"></div></div>';
+    gt.appendChild(row);
+    return { job: row.querySelector('.job'), used: row.querySelector('.inst-used'), idle: row.querySelector('.inst-idle') };
+  });
+  var endLine = document.createElement('div');
+  endLine.className = 'gt-end';
+  endLine.innerHTML = '<b></b>';
+  var endWrap = document.createElement('div');
+  endWrap.style.cssText = 'position:absolute;left:140px;right:0;top:0;bottom:0;pointer-events:none';
+  endWrap.appendChild(endLine);
+  gt.appendChild(endWrap);
+  if (window.matchMedia('(max-width: 900px)').matches) endWrap.style.left = '96px';
+  var pct = function (h) { return (h / H * 100) + '%'; };
+
+  function layoutAir(step) {
+    var st = step <= 2 ? start.serial : step <= 4 ? start.cads : start.parallel;
+    var d = step <= 2 ? dur.a : dur.b;
+    rows.forEach(function (r, i) {
+      var id = step === 5 ? 0 : idle[i];
+      r.job.style.left = r.used.style.left = pct(st[i]);
+      r.job.style.width = r.used.style.width = pct(d[i]);
+      r.idle.style.left = pct(st[i] + d[i]);
+      r.idle.style.width = pct(id);
+    });
+    endLine.classList.toggle('lab-left', step !== 5);
+    if (step === 1) { endLine.style.left = pct(10.5); endLine.firstChild.textContent = '10.5 h end to end'; }
+    if (step === 5) { endLine.style.left = pct(6.5); endLine.firstChild.textContent = '6.5 h'; }
+  }
+  var airPanels = airStage.querySelectorAll('.ap');
+  Stepper(document.getElementById('airDg'), [
+    { title: 'How it ran for years',
+      caption: 'A ~10-year-old daily pipeline for profitability reports. Jobs ran one after another, each on its own instance. 10.5 hours end to end.' },
+    { title: 'The break',
+      caption: 'One job pulled data through an API. It was built for about 1.1 GB and grew to about 3 GB. The pull stopped working at ~3.3 GB.' },
+    { title: 'Fix 1: CADS',
+      caption: 'An API cannot move data that large. I switched to cross-account data sharing (CADS), S3 to S3. The job went from 25 to 35 min to 5 to 7 min, and file size stopped being a constraint.' },
+    { title: 'Zoom out',
+      caption: 'Changing one job changed what the pipeline needed. Teams had tuned single jobs for years. I compared hours used with hours alive, and a lot of compute sat idle.' },
+    { title: 'Three fixes, whole pipeline',
+      caption: 'Tighter shutdown, right-sized instances, and parallel lanes for steps the new pull made independent. 10.5h to 6.5h, ~25% lower compute, ~$10K per month.' }
+  ], function (i) {
+    var step = i + 1;
+    airStage.dataset.step = step;
+    layoutAir(step);
+    activate(airPanels, step);
+    gt.classList.remove('zoom');
+    if (step === 4 && !reduced) { void gt.offsetWidth; gt.classList.add('zoom'); }
+  });
+
+  /* ---- Migration validation diagram ---- */
+  document.querySelectorAll('#migStage .rgrid').forEach(function (g) {
+    var n = +g.dataset.cells, diff = g.dataset.diff ? +g.dataset.diff : -1;
+    var size = g.classList.contains('small') ? 26 : 36, cols = 6, rowsN = Math.ceil(n / cols);
+    var html = '';
+    for (var k = 0; k < n; k++) {
+      var c = k % cols, r = Math.floor(k / cols);
+      var dx = ((cols - 1) / 2 - c) * size, dy = ((rowsN - 1) / 2 - r) * size;
+      html += '<i style="--k:' + k + ';--dx:' + dx + 'px;--dy:' + dy + 'px"' + (k === diff ? ' class="diff"' : '') + '></i>';
+    }
+    g.insertAdjacentHTML('afterbegin', html);
+  });
+  var bgrid = document.getElementById('bgrid'), cellsHtml = '';
+  for (var b = 0; b < 160; b++) cellsHtml += '<i style="--k:' + b + '"' + (b === 97 ? ' class="bad"' : '') + '></i>';
+  bgrid.innerHTML = cellsHtml;
+
+  var migStage = document.getElementById('migStage');
+  var migScenes = migStage.querySelectorAll('.ms');
+  var counter = document.getElementById('migCounter');
+  var counters = [
+    '<b>120,000,000</b><small>comparisons (4M records x 30)</small>',
+    '<s>120,000,000</s><b>4,000,000</b><small>comparisons (one per record)</small>',
+    '<s>4,000,000</s><b>~160</b><small>batch checks</small>',
+    '<b>~160</b><small>batch checks, 1 mismatch in this example</small>',
+    '<b>1 batch &rarr; 1 record &rarr; 1 attribute</b><small>everything else stays closed</small>'
+  ];
+  Stepper(document.getElementById('migDg'), [
+    { title: 'One record, 30 checks',
+      caption: 'Each cost center has about 30 attributes. Checking every one across 4M records is about 120 million comparisons.' },
+    { title: 'One hash per record',
+      caption: 'One SHA-2 hash per record turns 30 checks into 1. 120M comparisons become 4M.' },
+    { title: 'One number per batch',
+      caption: 'Sum the record hashes in batches of about 25,000, for the old and the new data. Compare the totals: about 160 checks.' },
+    { title: 'Compare all batches',
+      caption: 'Every batch total is compared. In this example, one batch out of about 160 does not match.' },
+    { title: 'Drill down only where it failed',
+      caption: 'Only that batch is opened. Its record hashes point to one record, and that record shows which attribute changed.' }
+  ], function (i) {
+    migStage.dataset.step = i + 1;
+    counter.innerHTML = counters[i];
+    activate(migScenes, i + 1);
+  });
 })();
 </script>
 
