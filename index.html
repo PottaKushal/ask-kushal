@@ -19,6 +19,7 @@
       <a href="#work">Work</a>
       <a href="projects-tesla.html">Projects</a>
       <a href="projects-infra.html">Infra Projects</a>
+      <a href="project-lob-engine.html">Matching Engine</a>
       <a href="#experience">Experience</a>
       <a href="#contact" class="nav-cta">Contact</a>
     </div>
@@ -66,9 +67,9 @@
       <div class="section-head">
         <div>
           <p class="section-kicker">Selected work</p>
-          <h2>Two projects, worth the deeper read</h2>
+          <h2>Three projects, worth the deeper read</h2>
         </div>
-        <p class="section-sub">Full write-ups of the two projects that best show how I actually work &mdash;
+        <p class="section-sub">Full write-ups of the three projects that best show how I actually work &mdash;
           not just what I shipped, but the problem, the approach, and what it moved.</p>
       </div>
 
@@ -98,6 +99,20 @@
             <div><div class="case-metric-num">Instant</div><div class="case-metric-label">cascading recalculation</div></div>
           </div>
           <span class="case-link">Read the case study + try the demo <span class="arrow">&rarr;</span></span>
+        </a>
+
+        <a href="project-lob-engine.html" class="case-card accent-lime">
+          <span class="case-tag">C++20 &middot; Systems &amp; performance &middot; Personal project</span>
+          <h3>A matching engine built four times, and measured each time</h3>
+          <p>A limit order book and matching engine in C++20. I profiled the textbook design, rebuilt it until
+            the hot path made no heap allocations, and checked every version against a brute-force reference
+            over millions of random events. The live demo runs the real engine in your browser.</p>
+          <div class="case-metrics">
+            <div><div class="case-metric-num">82M/s</div><div class="case-metric-label">events, one thread</div></div>
+            <div><div class="case-metric-num">6.4&times;</div><div class="case-metric-label">vs std::map baseline</div></div>
+            <div><div class="case-metric-num">8M</div><div class="case-metric-label">events diff-tested per run</div></div>
+          </div>
+          <span class="case-link">Read the write-up + open the demo <span class="arrow">&rarr;</span></span>
         </a>
       </div>
     </div>
