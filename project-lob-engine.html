@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kushal Kumar Potta — lob-engine: C++20 Matching Engine</title>
+<meta name="description" content="lob-engine: a C++20 limit order book and matching engine by Kushal Kumar Potta, with measured throughput and tail latency, differential testing against a reference implementation, and a live in-browser demo." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* ---------- Page-specific: project-lob-engine ---------- */
+  .nav-links a.nav-active { color: var(--accent); }
+  .hero-actions-inline { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--card-border); border-radius: var(--radius-sm); margin: 18px 0 10px; }
+  .results { width: 100%; border-collapse: collapse; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+  .results th, .results td { padding: 11px 14px; text-align: right; border-bottom: 1px solid var(--card-border); white-space: nowrap; }
+  .results th:first-child, .results td:first-child { text-align: left; white-space: normal; min-width: 190px; }
+  .results th { color: var(--text-faint); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .results td { color: var(--text-dim); }
+  .results tr:last-child td { border-bottom: 0; }
+  .results td strong { color: var(--accent); }
+  .fineprint { color: var(--text-faint); font-size: 0.85rem; }
+  .case-block code { font-size: 0.9em; color: var(--text); background: var(--card); padding: 1px 6px; border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Kushal Kumar Potta</a>
+    <div class="nav-links">
+      <a href="index.html#work">Work</a>
+      <a href="projects-tesla.html">Projects</a>
+      <a href="projects-infra.html">Infra Projects</a>
+      <a href="project-lob-engine.html" class="nav-active" aria-current="page">Matching Engine</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#contact" class="nav-cta">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="case-hero">
+  <div class="case-hero-inner">
+    <a href="index.html#work" class="back-link">&larr; Back to portfolio</a>
+    <p class="eyebrow">Personal project &middot; C++20 &middot; Systems &amp; performance</p>
+    <h1>lob-engine: a matching engine built four times, and measured each time</h1>
+    <p class="role-line">A limit order book and matching engine in C++20. I started with the textbook design,
+      profiled it, and rebuilt it until the hot path made no heap allocations &mdash; then checked every version
+      against a brute-force reference over millions of random events.</p>
+    <div class="hero-actions-inline">
+      <a href="https://pottakushal.github.io/lob-engine/" class="btn btn-primary" target="_blank" rel="noopener">Open the live demo</a>
+      <a href="https://github.com/PottaKushal/lob-engine" class="btn btn-ghost" target="_blank" rel="noopener">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<div class="case-body">
+
+  <div class="case-block">
+    <h2>Measured results</h2>
+    <div class="impact-grid">
+      <div class="impact-item">
+        <div class="impact-num">82M/s</div>
+        <div class="impact-label">events matched per second on one thread</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">6.4&times;</div>
+        <div class="impact-label">faster than the std::map baseline, same event stream</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">42 ns</div>
+        <div class="impact-label">p99 per-event latency (one tick of a 41 ns clock)</div>
+      </div>
+      <div class="impact-item coral">
+        <div class="impact-num">8M</div>
+        <div class="impact-label">random events checked against a reference on every test run</div>
+      </div>
+      <div class="impact-item coral">
+        <div class="impact-num">5 / 5</div>
+        <div class="impact-label">deliberately seeded bugs caught by the differential tests</div>
+      </div>
+      <div class="impact-item coral">
+        <div class="impact-num">0</div>
+        <div class="impact-label">heap allocations on the hot path in the final version</div>
+      </div>
+    </div>
+    <p class="fineprint" style="margin-top:16px">Apple M4, macOS 15.5, Apple clang 17, <code>-O3</code>, single
+      thread, in memory, synthetic order flow, median of 7 runs. Not compared with any production system. Method
+      and caveats are in the repository's BENCHMARKS.md.</p>
+  </div>
+
+  <div class="case-block">
+    <h2>The problem</h2>
+    <p>A matching engine keeps every resting buy and sell order for an instrument and pairs incoming orders with
+      them by price first, then arrival time. It has to do that correctly for every order type, and it has to do
+      it in a predictable number of nanoseconds, because the slowest events are the ones that matter.</p>
+    <p>I wanted a project where both claims &mdash; &ldquo;it is fast&rdquo; and &ldquo;it is correct&rdquo;
+      &mdash; were backed by something a reader could re-run.</p>
+  </div>
+
+  <div class="case-block">
+    <h2>What I built</h2>
+    <p><strong>The same rules, four data structures.</strong> Limit, market, IOC, FOK and post-only orders;
+      cancel; modify with explicit queue-priority rules; self-trade prevention. Prices are integer ticks, and the
+      book is a deterministic function of its input.</p>
+    <div class="table-scroll">
+      <table class="results">
+        <thead><tr><th>Version</th><th>M events/s</th><th>vs v1</th><th>p99 ns</th></tr></thead>
+        <tbody>
+          <tr><td>v1 &mdash; std::map levels, std::list orders</td><td>12.90</td><td>1.0&times;</td><td>251</td></tr>
+          <tr><td>v2 &mdash; flat array of price levels</td><td>18.16</td><td>1.4&times;</td><td>251</td></tr>
+          <tr><td>v3 &mdash; order pool, intrusive queues, no allocation</td><td><strong>82.31</strong></td><td><strong>6.4&times;</strong></td><td>42</td></tr>
+          <tr><td>v3 + bitmap of non-empty levels (default)</td><td>80.77</td><td>6.3&times;</td><td>42</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>A profile that changed the plan.</strong> Replacing the tree with a flat array only bought
+      1.4&times;. Sampling showed why: 57% of the time was in <code>malloc</code> and <code>free</code>.
+      Moving orders into a preallocated pool with index-linked queues and an open-addressing id table removed the
+      allocator from the profile entirely and gave a further 4.5&times;.</p>
+    <p><strong>A reference implementation and a differential test.</strong> A deliberately simple book &mdash;
+      one unsorted vector, scanned for every decision &mdash; processes the same randomized stream as the fast
+      books. Their output must match after every event. A libFuzzer target does the same with arbitrary bytes,
+      and the suite runs under AddressSanitizer, UBSan and ThreadSanitizer.</p>
+    <p><strong>A lock-free pipeline and a replay format.</strong> A single-producer single-consumer ring buffer
+      with documented memory ordering connects feed, matcher and publisher threads. A compact binary log replays
+      to the same output hash on every version, compiler and standard library I tried.</p>
+    <p><strong>A research layer and a demo.</strong> A Python backtester drives the real engine over a pipe, so
+      a market-making strategy gets true queue priority against synthetic order flow. The engine is also
+      compiled to WebAssembly, so the demo page lets you submit orders into it in the browser.</p>
+  </div>
+
+  <div class="case-block">
+    <h2>Two results I did not expect</h2>
+    <div class="callout">
+      <strong>An optimization that made the benchmark slower, and stayed.</strong> A flat price array has one bad
+      case: when the best level empties and the next one is far away, finding it took about 14 microseconds
+      instead of about 12 nanoseconds. A two-level bitmap fixes that &mdash; the same input went from 0.12M to
+      153M events per second &mdash; but costs about 2% on ordinary workloads. I kept it on by default, because
+      a matching engine should not have an input that makes it a thousand times slower.
+    </div>
+    <p style="margin-top:18px"></p>
+    <div class="callout coral">
+      <strong>The multi-threaded version is slower.</strong> Decoding, matching and encoding one message is
+      about 18 ns of work. Passing it between cores twice costs more than that, so the three-thread pipeline
+      runs at 22.6M messages per second against 54.4M on one thread. The write-up explains the mechanism and
+      when the pipeline is still the right structure. I report it because it is what I measured.
+    </div>
+  </div>
+
+  <div class="case-block">
+    <h2>What it does not do</h2>
+    <p>One instrument, in memory, on a laptop without isolated cores. No network layer, persistence, auctions or
+      exchange connectivity. All order flow is synthetic, and the strategy study is a model study, not a trading
+      result. The repository's DESIGN.md lists the limitations and what I would build next.</p>
+  </div>
+
+  <div class="case-block">
+    <a href="https://pottakushal.github.io/lob-engine/" class="btn btn-primary" target="_blank" rel="noopener">Open the live demo</a>
+    <a href="index.html#work" class="btn btn-ghost">&larr; Back to all work</a>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p>Built by Kushal, with Claude.</p>
+</footer>
+
+</body>
+</html>
